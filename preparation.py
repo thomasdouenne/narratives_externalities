@@ -1,3 +1,4 @@
+  
 # -*- coding: utf-8 -*-
 
 
@@ -12,7 +13,14 @@ import pandas as pd
 import numpy as np
 
 
-
-
 # Read data from Insee
-donnees_qualtrics = pd.read_csv(r'C:\Users\thoma\Documents\Github\narratives_externalities\preparation_survey\donnees_qualtrics_wip.csv', sep=',')
+data_qualtrics_raw = \
+    pd.read_csv(r'C:\Users\TDOUENN\Documents\Projects\Narratives\Data\data_qualtrics_raw.csv', sep=',')
+
+
+##### Survey key statictics
+
+# Average response time:
+# Median response time:
+
+donnees_qualtrics.to_csv(r'C:\Users\TDOUENN\Documents\Projects\Narratives\Data\data_qualtrics_treated.csv', sep=',')
