@@ -1,24 +1,23 @@
-  
-# -*- coding: utf-8 -*-
+  # -*- coding: utf-8 -*-
 
 
 """
-This script ...
+This script prepares the data collected from the Qualtrics pilot survey
+on narratives and externalities to make it ready for analysis
 """
 
 from __future__ import division
 
 
 import pandas as pd
-import numpy as np
 
 
-# Read data from Insee
+##### Read data from Qualtrics
 data_qualtrics_raw = \
-    pd.read_csv(r'C:\Users\TDOUENN\Documents\Projects\Narratives\Data\data_qualtrics_raw.csv', sep=',')
+    pd.read_csv(r'C:\Users\TDOUENN\Documents\Projects\Narratives\Data\data_qualtrics_pilot_narratives_raw.csv', sep=',')
 
 
-# Re-label variables
+##### Re-label variables
 data_qualtrics_renamed = data_qualtrics_raw.rename(
     columns={'StartDate': 'time_start',
              'EndDate': 'time_end',
@@ -128,11 +127,18 @@ data_qualtrics_renamed = data_qualtrics_raw.rename(
              }
           ).copy()
 
-print(data_qualtrics_renamed.columns)
+##### Create handy variables
+data_qualtrics_renamed['topic_meat'] = 1*(data_qualtrics_renamed['meat_frequency_respondent'].isna() == False)
+data_qualtrics_renamed['topic_airtravel'] = 1*(data_qualtrics_renamed['airtravel_frequency_respondent'].isna() == False)
+data_qualtrics_renamed['topic_vehicle'] = 1*(data_qualtrics_renamed['vehicle_desirable_future'].isna() == False)
+data_qualtrics_renamed['topic_vaccin'] = 1*(data_qualtrics_renamed['vaccin_respondent'].isna() == False)
 
-##### Survey key statictics
+data_qualtrics_renamed['matrix_respondent'] = 1*(data_qualtrics_renamed['matrix_respondent_meat_farmers_precarity'].isna() == False)
+data_qualtrics_renamed['matrix_french'] = 1*(data_qualtrics_renamed['matrix_french_meat_farmers_precarity'].isna() == False)
 
-# Average response time:
-# Median response time:
+data_qualtrics_renamed['survey_fully_completed'] = 1*(data_qualtrics_renamed['trust_scientists'].isna() == False)
 
-donnees_qualtrics.to_csv(r'C:\Users\TDOUENN\Documents\Projects\Narratives\Data\data_qualtrics_treated.csv', sep=',')
+df_complete_answers = data_qualtrics_renamed.query('survey_fully_completed == 1').copy()
+
+##### Save dataframe
+data_qualtrics_renamed.to_csv(r'C:\Users\TDOUENN\Documents\Projects\Narratives\Data\data_qualtrics_pilot_narratives_prepared.csv', sep=',')
