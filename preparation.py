@@ -180,13 +180,51 @@ def meat_frequency_desirable_num(answer):
 
 data_qualtrics_renamed['meat_frequency_desirable_num'] = data_qualtrics_renamed['meat_frequency_desirable'].apply(meat_frequency_desirable_num) 
 
-
 ##### Create final dataframe with complete answers
 df_complete_answers = data_qualtrics_renamed.query('survey_fully_completed == 1').copy()
 df_variable_labels = df_complete_answers.head(2)
 df_complete_answers = df_complete_answers.drop(df_complete_answers.index[[0,1]])
 
+# Compute CO2 emissions from respondents' vehicles
+df_complete_answers['average_fuel_consumption_vehicles'] = (
+    df_complete_answers['fuel_consumption_only_vehicle'].fillna(0).apply(pd.to_numeric)
+    + df_complete_answers['fuel_consumption_average_vehicle'].fillna(0).apply(pd.to_numeric)
+    )
+df_complete_answers['average_fuel_consumption_vehicles'] = df_complete_answers['average_fuel_consumption_vehicles'] + 6.5 * (df_complete_answers['average_fuel_consumption_vehicles'] == 0)
 
+df_complete_answers['total_nb_kilometers'] = (
+    df_complete_answers['nb_kilometers_no_vehicle'].fillna(0).apply(pd.to_numeric)
+    + df_complete_answers['nb_kilometers_only_vehicle'].fillna(0).apply(pd.to_numeric)
+    + df_complete_answers['nb_kilometers_all_vehicles'].fillna(0).apply(pd.to_numeric)
+    )
+
+df_complete_answers['co2_intensity_vehicles'] = (
+    0.00250 * (df_complete_answers['nb_vehicles'] == 'Aucun') # TODO: 0.00250 is an arbitrary number
+    + 0.00228 * (df_complete_answers['fuel_type_only_vehicle'] == 'Essence')
+    + 0.00265 * (df_complete_answers['fuel_type_only_vehicle'] == 'Diesel')
+    + 0.0005 * (df_complete_answers['fuel_type_only_vehicle'] == u'Électrique ou hybride.')
+    + 0.00250 * (df_complete_answers['fuel_type_only_vehicle'] == u'Autre')
+    + (2/3) * 0.00228 * (df_complete_answers['fuel_type_main_vehicle'] == 'Essence')
+    + (2/3) * 0.00265 * (df_complete_answers['fuel_type_main_vehicle'] == 'Diesel')
+    + (2/3) * 0.0005 * (df_complete_answers['fuel_type_main_vehicle'] == u'Électrique ou hybride.') # TODO: 0.0005 is an arbitrary number
+    + (2/3) * 0.00250 * (df_complete_answers['fuel_type_main_vehicle'] == u'Autre') # TODO: 0.0025 is an arbitrary number
+    + (1/3) * 0.00228 * (df_complete_answers['fuel_type_second_vehicle'] == 'Essence')
+    + (1/3) * 0.00265 * (df_complete_answers['fuel_type_second_vehicle'] == 'Diesel')
+    + (1/3) * 0.0005 * (df_complete_answers['fuel_type_second_vehicle'] == u'Électrique ou hybride.') # TODO: 0.0005 is an arbitrary number
+    + (1/3) * 0.00250 * (df_complete_answers['fuel_type_second_vehicle'] == u'Autre') # TODO: 0.0025 is an arbitrary number
+    )
+
+df_complete_answers['co2_emissions_vehicles'] = (
+    df_complete_answers['total_nb_kilometers'] * 0.01 * df_complete_answers['average_fuel_consumption_vehicles'] * df_complete_answers['co2_intensity_vehicles']
+    )
+
+df_complete_answers['co2_quintile'] = (
+    1 * (df_complete_answers['topic_vehicle'] == 1)
+    + 1 * (df_complete_answers['co2_emissions_vehicles'] > (df_complete_answers[df_complete_answers['topic_vehicle']==1]['co2_emissions_vehicles'].quantile(0.2)))
+    + 1 * (df_complete_answers['co2_emissions_vehicles'] > (df_complete_answers[df_complete_answers['topic_vehicle']==1]['co2_emissions_vehicles'].quantile(0.4)))
+    + 1 * (df_complete_answers['co2_emissions_vehicles'] > (df_complete_answers[df_complete_answers['topic_vehicle']==1]['co2_emissions_vehicles'].quantile(0.6)))
+    + 1 * (df_complete_answers['co2_emissions_vehicles'] > (df_complete_answers[df_complete_answers['topic_vehicle']==1]['co2_emissions_vehicles'].quantile(0.8)))
+    )
 
 ##### Save dataframe
 data_qualtrics_renamed.to_csv(r'C:\Users\TDOUENN\Documents\Projects\Narratives\Data\data_qualtrics_pilot_narratives_prepared_full.csv', sep=',')

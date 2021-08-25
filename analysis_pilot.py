@@ -70,9 +70,30 @@ for respondent in items_respondents_airtravel:
 
 #print(df_transition_matrix_airtravel_frequency.to_latex(caption='Matrix of opinions on air travel consumption'))
 
+
 ##### Vehicles
 df_vehicle = df_pilot.query('topic_vehicle == 1').copy()
 
+print(df_vehicle['total_nb_kilometers'].mean())
+print(df_vehicle['total_nb_kilometers'].quantile(0.75))
+
+print(df_vehicle['co2_emissions_vehicles'].mean())
+print(df_vehicle['co2_emissions_vehicles'].quantile(0.25))
+
+items_desirable_vehicle = [u'de cesser de les utiliser très rapidement (d\'ici 2030 ou avant)', u'de cesser de les utiliser progressivement (d\'ici 2040 ou 2050)',
+                           u'de cesser d\'utiliser les véhicules diesel mais pas les véhicule essence', u'de continuer à les utiliser tant que des progrès majeurs ne sont pas fait vis-à-vis des véhicules électriques',
+                           u'de continuer à les utiliser aussi longtemps que le pétrole est disponible', u'NSP (Ne sait pas, ne se prononce pas).']
+
+for item in items_desirable_vehicle:
+    print(item, ":", float(len(df_vehicle[df_vehicle.vehicle_desirable_future == item])) / len(df_vehicle))
+
+df_transition_matrix_vehicle = pd.DataFrame(index=items_desirable_vehicle, columns=range(1,6), dtype=float)
+for respondent in range(1,6):
+    for desirable in items_desirable_vehicle:
+        df_transition_matrix_vehicle[respondent][desirable] = \
+            float(len(df_vehicle[df_vehicle.co2_quintile == respondent][df_vehicle.vehicle_desirable_future == desirable])) / len(df_vehicle[df_vehicle.co2_quintile == respondent])
+
+#print(df_transition_matrix_vehicle.to_latex(caption='Matrix of opinions on the future of thermic vehicles'))
 
 
 ##### Vaccin
