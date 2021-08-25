@@ -63,14 +63,14 @@ data_qualtrics_renamed = data_qualtrics_raw.rename(
              'Q101.1': 'vehicle_why_neutral_open',
              'Q102.1': 'vehicle_electric_pollutes_more_argument_open',
              'Q103.1': 'vehicle_thermiaue_pollutes_more_argument_open',
-             'Q85': 'vaccin_respondent',
-             'Q98.1': 'vaccin_third_dose_respondent',
-             'Q88': 'vaccin_desirable',
-             'Q89': 'vaccin_why_favorable_open',
-             'Q90': 'vaccin_why_against_open',
-             'Q91': 'vaccin_why_neutral_open',
-             'Q92': 'vaccin_poor_country_argument_open',
-             'Q93': 'vaccin_protecting_others_argument_open',
+             'Q85': 'vaccine_respondent',
+             'Q98.1': 'vaccine_third_dose_respondent',
+             'Q88': 'vaccine_desirable',
+             'Q89': 'vaccine_why_favorable_open',
+             'Q90': 'vaccine_why_against_open',
+             'Q91': 'vaccine_why_neutral_open',
+             'Q92': 'vaccine_poor_country_argument_open',
+             'Q93': 'vaccine_protecting_others_argument_open',
              'Q56_1': 'matrix_respondent_meat_farmers_precarity',
              'Q56_2': 'matrix_respondent_meat_natural',
              'Q56_3': 'matrix_respondent_meat_nutrients',
@@ -86,11 +86,11 @@ data_qualtrics_renamed = data_qualtrics_raw.rename(
              'Q114_3': 'matrix_respondent_vehicle_small_share_cc',
              'Q114_4': 'matrix_respondent_vehicle_batteries',
              'Q114_5': 'matrix_respondent_vehicle_nuclear',
-             'Q112_1': 'matrix_respondent_vaccin_protecting_others',
-             'Q112_2': 'matrix_respondent_vaccin_imperfect_protecting_others',
-             'Q112_3': 'matrix_respondent_vaccin_economic_activity',
-             'Q112_4': 'matrix_respondent_vaccin_taxes_industry',
-             'Q112_5': 'matrix_respondent_vaccin_poor_countries',          
+             'Q112_1': 'matrix_respondent_vaccine_protecting_others',
+             'Q112_2': 'matrix_respondent_vaccine_imperfect_protecting_others',
+             'Q112_3': 'matrix_respondent_vaccine_economic_activity',
+             'Q112_4': 'matrix_respondent_vaccine_taxes_industry',
+             'Q112_5': 'matrix_respondent_vaccine_poor_countries',          
              'Q125_Page Submit': 'matrix_respondent_timer',
              'Q64_1': 'matrix_french_meat_farmers_precarity',
              'Q64_2': 'matrix_french_meat_natural',
@@ -107,11 +107,11 @@ data_qualtrics_renamed = data_qualtrics_raw.rename(
              'Q115_3': 'matrix_french_vehicle_small_share_cc',
              'Q115_4': 'matrix_french_vehicle_batteries',
              'Q115_5': 'matrix_french_vehicle_nuclear',
-             'Q113_1': 'matrix_french_vaccin_protecting_others',
-             'Q113_2': 'matrix_french_vaccin_imperfect_protecting_others',
-             'Q113_3': 'matrix_french_vaccin_economic_activity',
-             'Q113_4': 'matrix_french_vaccin_taxes_industry',
-             'Q113_5': 'matrix_french_vaccin_poor_countries',          
+             'Q113_1': 'matrix_french_vaccine_protecting_others',
+             'Q113_2': 'matrix_french_vaccine_imperfect_protecting_others',
+             'Q113_3': 'matrix_french_vaccine_economic_activity',
+             'Q113_4': 'matrix_french_vaccine_taxes_industry',
+             'Q113_5': 'matrix_french_vaccine_poor_countries',          
              'Q126_Page Submit': 'matrix_french_timer',
              'Q13': 'trust_others',
              'Q14_1': 'life_satisfaction_scale',
@@ -131,7 +131,7 @@ data_qualtrics_renamed = data_qualtrics_raw.rename(
 data_qualtrics_renamed['topic_meat'] = 1*(data_qualtrics_renamed['meat_frequency_respondent'].isna() == False)
 data_qualtrics_renamed['topic_airtravel'] = 1*(data_qualtrics_renamed['airtravel_frequency_respondent'].isna() == False)
 data_qualtrics_renamed['topic_vehicle'] = 1*(data_qualtrics_renamed['vehicle_desirable_future'].isna() == False)
-data_qualtrics_renamed['topic_vaccin'] = 1*(data_qualtrics_renamed['vaccin_respondent'].isna() == False)
+data_qualtrics_renamed['topic_vaccine'] = 1*(data_qualtrics_renamed['vaccine_respondent'].isna() == False)
 
 data_qualtrics_renamed['matrix_respondent'] = 1*(data_qualtrics_renamed['matrix_respondent_meat_farmers_precarity'].isna() == False)
 data_qualtrics_renamed['matrix_french'] = 1*(data_qualtrics_renamed['matrix_french_meat_farmers_precarity'].isna() == False)
@@ -141,44 +141,56 @@ data_qualtrics_renamed['survey_fully_completed'] = 1*(data_qualtrics_renamed['tr
 
 ##### Re-code certain variables
 
-def meat_frequency_respondent_num(answer):
-    if answer == "Jamais":
+def matrix_respondent_num(answer):
+    if answer == "Pas du tout pertinent":
+        return -2
+    elif answer == u'Peu pertinent':
+        return -1
+    elif answer == u'NSP (Ne sait pas, ne se prononce pas)':
         return 0
-    elif answer == u'Très occasionnellement':
+    elif answer == u'Assez pertinent':
         return 1
-    elif answer == u'1 à 2 repas par semaine':
+    elif answer == u'Très pertinent':
         return 2
-    elif answer == u'3 à 5 repas par semaine':
-        return 3
-    elif answer == u'Environ un repas par jour':
-        return 4
-    elif answer == u'Presque à chaque repas':
-        return 5
     else:
         return 9999
 
-data_qualtrics_renamed['meat_frequency_respondent_num'] = data_qualtrics_renamed['meat_frequency_respondent'].apply(meat_frequency_respondent_num) 
+variables_survey = list(data_qualtrics_renamed.columns)
+matrix_respondent_variables = list()
+for topic in ['meat', 'airtravel', 'vehicle', 'vaccine']:
+    for var in variables_survey:
+        if 'matrix_respondent_{}'.format(topic) in var:
+            matrix_respondent_variables.append(var)
+
+for var in matrix_respondent_variables:
+    data_qualtrics_renamed['{}_num'.format(var)] = data_qualtrics_renamed[var].apply(matrix_respondent_num)
 
 
-def meat_frequency_desirable_num(answer):
-    if answer == "jamais":
+def matrix_french_num(answer):
+    if answer == 'Une très petite minorité':
+        return -2
+    elif answer == u'Une minorité':
+        return -1
+    elif answer == u'NSP (Ne sait pas, ne se prononce pas)':
         return 0
-    elif answer == u'très occasionnellement':
+    elif answer == u'La moitié':
+        return 0
+    elif answer == u'La majorité':
         return 1
-    elif answer == u'1 à 2 repas par semaine':
+    elif answer == u'La très grande majorité':
         return 2
-    elif answer == u'3 à 5 repas par semaine':
-        return 3
-    elif answer == u'environ un repas par jour':
-        return 4
-    elif answer == u'presque à chaque repas':
-        return 5
-    elif answer == u'NSP (Ne sait pas, ne se prononce pas).':
-        return 99
     else:
         return 9999
 
-data_qualtrics_renamed['meat_frequency_desirable_num'] = data_qualtrics_renamed['meat_frequency_desirable'].apply(meat_frequency_desirable_num) 
+matrix_french_variables = list()
+for topic in ['meat', 'airtravel', 'vehicle', 'vaccine']:
+    for var in variables_survey:
+        if 'matrix_french_{}'.format(topic) in var:
+            matrix_french_variables.append(var)
+
+for var in matrix_french_variables:
+    data_qualtrics_renamed['{}_num'.format(var)] = data_qualtrics_renamed[var].apply(matrix_french_num)
+
 
 ##### Create final dataframe with complete answers
 df_complete_answers = data_qualtrics_renamed.query('survey_fully_completed == 1').copy()
@@ -224,6 +236,22 @@ df_complete_answers['co2_quintile'] = (
     + 1 * (df_complete_answers['co2_emissions_vehicles'] > (df_complete_answers[df_complete_answers['topic_vehicle']==1]['co2_emissions_vehicles'].quantile(0.4)))
     + 1 * (df_complete_answers['co2_emissions_vehicles'] > (df_complete_answers[df_complete_answers['topic_vehicle']==1]['co2_emissions_vehicles'].quantile(0.6)))
     + 1 * (df_complete_answers['co2_emissions_vehicles'] > (df_complete_answers[df_complete_answers['topic_vehicle']==1]['co2_emissions_vehicles'].quantile(0.8)))
+    )
+
+df_complete_answers['km_quintile'] = (
+    1 * (df_complete_answers['topic_vehicle'] == 1)
+    + 1 * (df_complete_answers['total_nb_kilometers'] > (df_complete_answers[df_complete_answers['topic_vehicle']==1]['total_nb_kilometers'].quantile(0.2)))
+    + 1 * (df_complete_answers['total_nb_kilometers'] > (df_complete_answers[df_complete_answers['topic_vehicle']==1]['total_nb_kilometers'].quantile(0.4)))
+    + 1 * (df_complete_answers['total_nb_kilometers'] > (df_complete_answers[df_complete_answers['topic_vehicle']==1]['total_nb_kilometers'].quantile(0.6)))
+    + 1 * (df_complete_answers['total_nb_kilometers'] > (df_complete_answers[df_complete_answers['topic_vehicle']==1]['total_nb_kilometers'].quantile(0.8)))
+    )
+
+
+df_complete_answers['electric_or_hybrid_dummy'] = (
+    1 * (df_complete_answers['fuel_type_only_vehicle'] == u'Électrique ou hybride.')
+    + 1 * (df_complete_answers['fuel_type_main_vehicle'] == u'Électrique ou hybride.')
+    + 1 * (df_complete_answers['fuel_type_second_vehicle'] == u'Électrique ou hybride.')
+    - 1 * (df_complete_answers['fuel_type_main_vehicle'] == u'Électrique ou hybride.') * (df_complete_answers['fuel_type_second_vehicle'] == u'Électrique ou hybride.')
     )
 
 ##### Save dataframe
