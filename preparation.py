@@ -138,7 +138,57 @@ data_qualtrics_renamed['matrix_french'] = 1*(data_qualtrics_renamed['matrix_fren
 
 data_qualtrics_renamed['survey_fully_completed'] = 1*(data_qualtrics_renamed['trust_scientists'].isna() == False)
 
+
+##### Re-code certain variables
+
+def meat_frequency_respondent_num(answer):
+    if answer == "Jamais":
+        return 0
+    elif answer == u'Très occasionnellement':
+        return 1
+    elif answer == u'1 à 2 repas par semaine':
+        return 2
+    elif answer == u'3 à 5 repas par semaine':
+        return 3
+    elif answer == u'Environ un repas par jour':
+        return 4
+    elif answer == u'Presque à chaque repas':
+        return 5
+    else:
+        return 9999
+
+data_qualtrics_renamed['meat_frequency_respondent_num'] = data_qualtrics_renamed['meat_frequency_respondent'].apply(meat_frequency_respondent_num) 
+
+
+def meat_frequency_desirable_num(answer):
+    if answer == "jamais":
+        return 0
+    elif answer == u'très occasionnellement':
+        return 1
+    elif answer == u'1 à 2 repas par semaine':
+        return 2
+    elif answer == u'3 à 5 repas par semaine':
+        return 3
+    elif answer == u'environ un repas par jour':
+        return 4
+    elif answer == u'presque à chaque repas':
+        return 5
+    elif answer == u'NSP (Ne sait pas, ne se prononce pas).':
+        return 99
+    else:
+        return 9999
+
+data_qualtrics_renamed['meat_frequency_desirable_num'] = data_qualtrics_renamed['meat_frequency_desirable'].apply(meat_frequency_desirable_num) 
+
+
+##### Create final dataframe with complete answers
 df_complete_answers = data_qualtrics_renamed.query('survey_fully_completed == 1').copy()
+df_variable_labels = df_complete_answers.head(2)
+df_complete_answers = df_complete_answers.drop(df_complete_answers.index[[0,1]])
+
+
 
 ##### Save dataframe
-data_qualtrics_renamed.to_csv(r'C:\Users\TDOUENN\Documents\Projects\Narratives\Data\data_qualtrics_pilot_narratives_prepared.csv', sep=',')
+data_qualtrics_renamed.to_csv(r'C:\Users\TDOUENN\Documents\Projects\Narratives\Data\data_qualtrics_pilot_narratives_prepared_full.csv', sep=',')
+df_complete_answers.to_csv(r'C:\Users\TDOUENN\Documents\Projects\Narratives\Data\data_qualtrics_pilot_narratives_prepared.csv', sep=',')
+df_variable_labels.to_csv(r'C:\Users\TDOUENN\Documents\Projects\Narratives\Data\data_qualtrics_pilot_narratives_labels.csv', sep=',')
