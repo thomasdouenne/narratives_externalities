@@ -10,8 +10,6 @@ from __future__ import division
 
 import pandas as pd
 
-pd.options.display.float_format = '{:.1%}'.format # pandas df display numbers in %.
-
 ##### Read data from Qualtrics
 data_pilot = {}
 
@@ -27,6 +25,7 @@ data_pilot['matrix_french'] = data_pilot['full'].query('matrix_french == 1').cop
 
 
 ##### Survey key statictics
+### Generalities
 dict_survey_statistics = {}
 
 vehicle_use_variables = ['total_nb_kilometers', 'co2_emissions_vehicles']
@@ -66,6 +65,7 @@ for var in sub_samples_variables:
             float(len(data_pilot['full'].query('{} == 1'.format(var)))) / len(data_pilot['full'])
 del sub_samples_variables, var
 
+### Socio-demographics
 dict_survey_statistics['socio_demographics'] = {}
 
 dict_survey_statistics['socio_demographics']['sexe'] = {}
@@ -107,6 +107,82 @@ for var in ['household_size', 'nb_above_14', 'income_respondent', 'income_househ
         dict_survey_statistics['socio_demographics'][var]['percentile_'+str(percentile)] = \
              data_pilot['full'][var].quantile(percentile/100)
 del percentile, var
+
+### Ideology
+dict_survey_statistics['ideology'] = {}
+
+dict_survey_statistics['ideology']['trust_others'] = {}
+dict_survey_statistics['ideology']['trust_others']['generally_yes'] = \
+    float(len(data_pilot['full'][data_pilot['full']['trust_others']==u'on peut faire confiance à la plupart des gens'])) / len(data_pilot['full'])
+dict_survey_statistics['ideology']['trust_others']['generally_no'] = \
+    float(len(data_pilot['full'][data_pilot['full']['trust_others']==u'on n’est jamais assez prudent quand on a affaire aux autres.'])) / len(data_pilot['full'])
+
+dict_survey_statistics['ideology']['trust_government'] = {}
+for answer in [u'Toujours', u'La plupart du temps', u'La moitié du temps', u'Parfois', u'Jamais', u'NSP (Ne sait pas, ne se prononce pas)']:
+    dict_survey_statistics['ideology']['trust_government'][answer] = \
+        float(len(data_pilot['full'][data_pilot['full']['trust_government']=='{}'.format(answer)])) / len(data_pilot['full'])
+del answer
+
+dict_survey_statistics['ideology']['life_satisfaction_scale'] = {}
+dict_survey_statistics['ideology']['life_satisfaction_scale']['mean'] = data_pilot['full']['life_satisfaction_scale'].mean()
+for percentile in [10, 25, 50, 75, 90]:
+    dict_survey_statistics['ideology']['life_satisfaction_scale']['percentile_'+str(percentile)] = \
+         data_pilot['full']['life_satisfaction_scale'].quantile(percentile/100)
+del percentile
+
+dict_survey_statistics['ideology']['political_leaning'] = {}
+for answer in [u'D\'extrême gauche', u'De gauche', u'Du centre', u'De droite', u'D\'extrême droite',
+               u'Conservateur', u'Libéral', u'Humaniste', u'Patriote', u'Apolitique', u'Écologiste',
+               u'Je ne souhaite pas répondre / ne se prononce pas']:
+    dict_survey_statistics['ideology']['political_leaning'][answer] = \
+        float(len(data_pilot['full'][data_pilot['full']['political_leaning'].str.contains('{}'.format(answer))])) / len(data_pilot['full'])
+del answer
+
+dict_survey_statistics['ideology']['media_for_news'] = {}
+for answer in [u'Télévision', u'Presse (écrite ou en ligne)', u'Réseaux sociaux', u'Radio', u'Autre']:
+    dict_survey_statistics['ideology']['media_for_news'][answer] = \
+        float(len(data_pilot['full'][data_pilot['full']['media_for_news']=='{}'.format(answer)])) / len(data_pilot['full'])
+del answer
+
+dict_survey_statistics['ideology']['social_networks_frequency'] = {}
+for answer in [u'Tous les jours, pendant au moins une heure', u'Tous les jours, pendant moins d\'une heure',
+               u'Presque tous les jours', u'De temps en temps', u'Jamais', u'NSP (Ne sait pas, ne se prononce pas)']:
+    dict_survey_statistics['ideology']['social_networks_frequency'][answer] = \
+        float(len(data_pilot['full'][data_pilot['full']['social_networks_frequency']=='{}'.format(answer)])) / len(data_pilot['full'])
+del answer
+
+### Ideology
+dict_survey_statistics['cc_science'] = {}
+
+dict_survey_statistics['cc_science']['cc_cause'] = {}
+for answer in [u'n\'est pas une réalité', u'est principalement dû à la variabilité naturelle du climat',
+               u'est principalement dû à l\'activité humaine', u'NSP (Ne sait pas, ne se prononce pas).']:
+    dict_survey_statistics['cc_science']['cc_cause'][answer] = \
+        float(len(data_pilot['full'][data_pilot['full']['cc_cause']=='{}'.format(answer)])) / len(data_pilot['full'])
+del answer
+
+dict_survey_statistics['cc_science']['cc_consequences'] = {}
+for answer in [u'Insignifiants, voire bénéfiques', u'Faibles, car les humains sauraient vivre avec',
+               u'Graves, car il y aurait plus de catastrophes naturelles', u'Désastreux, les modes de vie seraient largement altérés',
+               u'Cataclysmiques, l\'humanité disparaîtrait', u'NSP (Ne sait pas, ne se prononce pas)']:
+    dict_survey_statistics['cc_science']['cc_consequences'][answer] = \
+        float(len(data_pilot['full'][data_pilot['full']['cc_consequences']=='{}'.format(answer)])) / len(data_pilot['full'])
+del answer
+
+dict_survey_statistics['cc_science']['cc_responsible'] = {}
+for answer in [u'Chacun d\'entre nous', u'Les plus riches', u'Les gouvernements', u'Certains pays étrangers',
+               u'Les générations passées', u'Des causes naturelles']:
+    dict_survey_statistics['cc_science']['cc_responsible'][answer] = \
+        float(len(data_pilot['full'][data_pilot['full']['cc_responsible'].str.contains('{}'.format(answer))])) / len(data_pilot['full'])
+del answer
+
+
+dict_survey_statistics['cc_science']['trust_scientists'] = {}
+for answer in [u'Oui, tout à fait', u'Oui, plutôt', u'Non, plutôt pas',
+               u'Non, pas du tout', u'NSP (Ne sait pas, ne se prononce pas)']:
+    dict_survey_statistics['cc_science']['trust_scientists'][answer] = \
+        float(len(data_pilot['full'][data_pilot['full']['trust_scientists']=='{}'.format(answer)])) / len(data_pilot['full'])
+del answer
 
 
 ##### Matrix arguments
@@ -461,8 +537,7 @@ for element in ['respondent', 'desirable']:
 del argument, arguments_topic, element, item, items_desirable_vaccine, items_respondents_vaccine, items_responses, matrix, topic
 #print(df_transition_matrix_vaccine.to_latex(caption='Matrix of opinions on covid vaccine'))
 
-
-
-# TODO: updater codes latex / remettre les df en pourcentages
-# TODO: study questions that are at the end of the survey\
+# TODO: updater codes latex
+# TODO: study questions that are at the end of the survey
 # TODO: study open answers
+# TODO: check if there is a way to create sections in the script
