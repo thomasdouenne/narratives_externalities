@@ -296,8 +296,61 @@ for topic in ['meat', 'airtravel', 'vehicle', 'vaccine']:
 del(items_matrix_respondent, items_matrix_french, variables_survey, variables_topic,
      variables_topic_joint, variables_topic_respondent, variables_topic_french, topic, var, answer)
 
+arguments_pros = ['meat_animal_welfare_num', 'meat_global_warming_num', 'meat_cancer_num',
+    'airtravel_global_warming_num', 'vehicle_air_pollution_num', 'vehicle_nuisance_city_num',
+    'vaccine_protecting_others_num', 'vaccine_economic_activity_num']
+arguments_cons = ['meat_farmers_precarity_num', 'meat_natural_num', 'meat_nutrients_num',
+    'airtravel_freerider_num', 'airtravel_open_mindedness_num', 'airtravel_against_progress_num',
+    'vehicle_small_share_cc_num', 'vehicle_batteries_num', 'vehicle_nuclear_num',
+    'vaccine_imperfect_protecting_others_num', 'vaccine_taxes_industry_num', 'vaccine_poor_countries_num']
 
-# TODO: categorize arguments depending on whether they are for/against and do summary statistics
+dict_matrices_arguments['pros_cons'] = pd.DataFrame(index=['meat', 'airtravel', 'vehicle', 'vaccine', 'all'],
+    columns=['pros_respondents', 'cons_respondents', 'pros_french', 'cons_french'], dtype=float)
+for item in ['pros', 'cons']:
+    for topic in ['meat', 'airtravel', 'vehicle', 'vaccine']:
+        dict_matrices_arguments['pros_cons']['{}_respondents'.format(item)][topic] = 0
+        dict_matrices_arguments['pros_cons']['{}_french'.format(item)][topic] = 0
+        nb_topic = 0
+        if item == 'pros':
+            arguments = arguments_pros
+        else:
+            arguments = arguments_cons
+        
+        for var in arguments:
+            if '{}'.format(topic) in var:
+                nb_topic = nb_topic + 1
+                dict_matrices_arguments['pros_cons']['{}_respondents'.format(item)][topic] = (
+                    dict_matrices_arguments['pros_cons']['{}_respondents'.format(item)][topic]
+                    + data_pilot['matrix_respondent']['matrix_respondent_'+var].mean()
+                    )
+                dict_matrices_arguments['pros_cons']['{}_french'.format(item)][topic] = (
+                    dict_matrices_arguments['pros_cons']['{}_french'.format(item)][topic]
+                    + data_pilot['matrix_french']['matrix_french_'+var].mean()
+                    )
+        dict_matrices_arguments['pros_cons']['{}_respondents'.format(item)][topic] = \
+            dict_matrices_arguments['pros_cons']['{}_respondents'.format(item)][topic] / nb_topic
+        dict_matrices_arguments['pros_cons']['{}_french'.format(item)][topic] = \
+            dict_matrices_arguments['pros_cons']['{}_french'.format(item)][topic] / nb_topic
+    
+    dict_matrices_arguments['pros_cons']['{}_respondents'.format(item)]['all'] = 0
+    dict_matrices_arguments['pros_cons']['{}_french'.format(item)]['all'] = 0
+    if item == 'pros':
+        arguments = arguments_pros
+    else:
+        arguments = arguments_cons
+    
+    for var in arguments:
+        dict_matrices_arguments['pros_cons']['{}_respondents'.format(item)]['all'] = (
+                    dict_matrices_arguments['pros_cons']['{}_respondents'.format(item)]['all']
+                    + data_pilot['matrix_respondent']['matrix_respondent_'+var].mean()
+                    ) / len(arguments)
+        dict_matrices_arguments['pros_cons']['{}_french'.format(item)]['all'] = (
+                    dict_matrices_arguments['pros_cons']['{}_french'.format(item)]['all']
+                    + data_pilot['matrix_french']['matrix_french_'+var].mean()
+                    ) / len(arguments)
+    
+
+# TODO: study arguments depending on people's position
 
 ### Meat
 
