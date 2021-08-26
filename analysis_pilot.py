@@ -66,7 +66,39 @@ for var in sub_samples_variables:
             float(len(data_pilot['full'].query('{} == 1'.format(var)))) / len(data_pilot['full'])
 del sub_samples_variables, var
 
-# TODO: socio demo
+dict_survey_statistics['socio_demographics'] = {}
+
+dict_survey_statistics['socio_demographics']['sexe'] = {}
+dict_survey_statistics['socio_demographics']['sexe']['woman'] = float(len(data_pilot['full'][data_pilot['full']['sexe']=='Féminin'])) / len(data_pilot['full'])
+dict_survey_statistics['socio_demographics']['sexe']['man'] = float(len(data_pilot['full'][data_pilot['full']['sexe']=='Masculin'])) / len(data_pilot['full'])
+
+dict_survey_statistics['socio_demographics']['age_group'] = {}
+for age in [u'18 à 24 ans', u'25 à 34 ans', u'35 à 49 ans', u'50 à 64 ans', u'65 ans ou plus']:
+    dict_survey_statistics['socio_demographics']['age_group'][age] = \
+        float(len(data_pilot['full'][data_pilot['full']['age_group']=='{}'.format(age)])) / len(data_pilot['full'])
+del age
+
+dict_survey_statistics['socio_demographics']['employment_status'] = {}
+for status in [u'Fonctionnaire', u'CDI', u'CDD', u'Intérimaire ou contrat précaire', u'Au chômage',
+               u'Étudiant(e)', u'Retraité(e)', u'Autre actif', u'Inactif']:
+    dict_survey_statistics['socio_demographics']['employment_status'][status] = \
+        float(len(data_pilot['full'][data_pilot['full']['employment_status']=='{}'.format(status)])) / len(data_pilot['full'])
+del status
+
+dict_survey_statistics['socio_demographics']['profession_type'] = {}
+for profession in [u'Agriculteur/rice', u'Artisan, commerçant(e), chef(fe) d\'entreprise', u'Cadre ou profession intellectuelle supérieure',
+                   u'Profession intermédiaire', u'Employé(e)', u'Ouvrier/ère', u'Retraité(e)', u'Autre Inactif/ve']:
+    dict_survey_statistics['socio_demographics']['profession_type'][profession] = \
+        float(len(data_pilot['full'][data_pilot['full']['profession_type']=='{}'.format(profession)])) / len(data_pilot['full'])
+del profession
+
+for var in ['household_size', 'nb_above_14', 'income_respondent', 'income_household']:
+    dict_survey_statistics['socio_demographics'][var] = {}
+    dict_survey_statistics['socio_demographics'][var]['mean'] = data_pilot['full'][var].mean()
+    for percentile in [10, 25, 50, 75, 90]:
+        dict_survey_statistics['socio_demographics'][var]['percentile_'+str(percentile)] = \
+             data_pilot['full'][var].quantile(percentile/100)
+del percentile
 
 ##### Meat
 items_respondents_meat = [u'Jamais', u'Très occasionnellement', u'1 à 2 repas par semaine',
@@ -194,7 +226,7 @@ for respondent in items_respondents_vaccine:
 del items_respondents_vaccine, items_desirable_vaccine, item, respondent, desirable
 #print(df_transition_matrix_vaccine.to_latex(caption='Matrix of opinions on covid vaccine'))
 
-#TODO: updater codes latex
+#TODO: updater codes latex / remettre les df en pourcentages
 
 
 ##### Matrix arguments
