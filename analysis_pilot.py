@@ -106,7 +106,7 @@ for var in ['household_size', 'nb_above_14', 'income_respondent', 'income_househ
     for percentile in [10, 25, 50, 75, 90]:
         dict_survey_statistics['socio_demographics'][var]['percentile_'+str(percentile)] = \
              data_pilot['full'][var].quantile(percentile/100)
-del percentile
+del percentile, var
 
 
 ##### Matrix arguments
@@ -220,7 +220,8 @@ for item in ['pros', 'cons']:
                     dict_matrices_arguments['pros_cons']['{}_french'.format(item)]['all']
                     + data_pilot['matrix_french']['matrix_french_'+var].mean()
                     ) / len(arguments)
-    
+
+del item, nb_topic, topic, var
 
 ##### Meat
 items_respondents_meat = [u'Jamais', u'Très occasionnellement', u'1 à 2 repas par semaine',
@@ -247,6 +248,8 @@ for respondent in items_respondents_meat:
         dict_meat['joint_respondent_desirable'][respondent][desirable] = \
             float(len(data_pilot['meat'][data_pilot['meat'].meat_frequency_respondent == respondent][data_pilot['meat'].meat_frequency_desirable == desirable])) / len(data_pilot['meat'][data_pilot['meat'].meat_frequency_respondent == respondent])
 
+del desirable, item, respondent
+
 ### Opinions on arguments in matrices
 for element in ['respondent', 'desirable']:
     if element == 'respondent':
@@ -270,7 +273,7 @@ for element in ['respondent', 'desirable']:
                 arguments_topic.append(argument)            
         dict_meat['score_arguments_{}_frequency'.format(element)]['respondent_{}'.format(topic)] = dict_meat['score_arguments_{}_frequency'.format(element)]['respondent_all'].loc[arguments_topic]
 
-del items_respondents_meat, items_desirable_meat, item, respondent, desirable
+del argument, arguments_topic, element, item, items_desirable_meat, items_respondents_meat, items_responses, matrix, topic
 #print(dict_meat['joint_respondent_desirable'].to_latex(caption='Matrix of opinions on meat consumption'))
 
 
@@ -299,6 +302,9 @@ for respondent in items_respondents_airtravel:
         dict_airtravel['joint_respondent_desirable'][respondent][desirable] = \
             float(len(data_pilot['airtravel'][data_pilot['airtravel'].airtravel_frequency_respondent == respondent][data_pilot['airtravel'].airtravel_frequency_desirable == desirable])) / len(data_pilot['airtravel'][data_pilot['airtravel'].airtravel_frequency_respondent == respondent])
 
+del desirable, item, respondent
+
+
 ### Opinions on arguments in matrices
 for element in ['respondent', 'desirable']:
     if element == 'respondent':
@@ -322,7 +328,7 @@ for element in ['respondent', 'desirable']:
                 arguments_topic.append(argument)            
         dict_airtravel['score_arguments_{}_frequency'.format(element)]['respondent_{}'.format(topic)] = dict_airtravel['score_arguments_{}_frequency'.format(element)]['respondent_all'].loc[arguments_topic]
 
-del items_respondents_airtravel, items_desirable_airtravel, item, respondent, desirable
+del argument, arguments_topic, element, item, items_desirable_airtravel, items_respondents_airtravel, items_responses, matrix, topic
 #print(df_transition_matrix_airtravel_frequency.to_latex(caption='Matrix of opinions on air travel consumption'))
 
 
@@ -369,6 +375,8 @@ for respondent in [0,1]:
         dict_vehicle['joint_electric_hybrid_desirable'][respondent][desirable] = \
             float(len(data_pilot['vehicle'][data_pilot['vehicle'].electric_or_hybrid_dummy == respondent][data_pilot['vehicle'].vehicle_desirable_future == desirable])) / len(data_pilot['vehicle'][data_pilot['vehicle'].electric_or_hybrid_dummy == respondent])
 
+del desirable, item, respondent
+
 ### Opinions on arguments in matrices
 
 for element in ['co2_quintile', 'nb_vehicles', 'vehicle_desirable_future']:
@@ -395,7 +403,7 @@ for element in ['co2_quintile', 'nb_vehicles', 'vehicle_desirable_future']:
                 arguments_topic.append(argument)            
         dict_vehicle['score_arguments_{}'.format(element)]['respondent_{}'.format(topic)] = dict_vehicle['score_arguments_{}'.format(element)]['respondent_all'].loc[arguments_topic]
 
-del items_number_vehicles, items_desirable_vehicle, item, respondent, desirable
+del argument, arguments_topic, element, item, items_desirable_vehicle, items_number_vehicles, items_responses, matrix, topic
 
 
 ##### Vaccine
@@ -425,6 +433,8 @@ for respondent in items_respondents_vaccine:
         dict_vaccine['joint_respondent_desirable'][respondent][desirable] = \
             float(len(data_pilot['vaccine'][data_pilot['vaccine'].vaccine_respondent == respondent][data_pilot['vaccine'].vaccine_desirable == desirable])) / len(data_pilot['vaccine'][data_pilot['vaccine'].vaccine_respondent == respondent])
 
+del desirable, item, respondent
+
 ### Opinions on arguments in matrices
 for element in ['respondent', 'desirable']:
     if element == 'respondent':
@@ -448,9 +458,11 @@ for element in ['respondent', 'desirable']:
                 arguments_topic.append(argument)            
         dict_vaccine['score_arguments_{}'.format(element)]['respondent_{}'.format(topic)] = dict_vaccine['score_arguments_{}'.format(element)]['respondent_all'].loc[arguments_topic]
 
-del items_respondents_vaccine, items_desirable_vaccine, item, respondent, desirable
+del argument, arguments_topic, element, item, items_desirable_vaccine, items_respondents_vaccine, items_responses, matrix, topic
 #print(df_transition_matrix_vaccine.to_latex(caption='Matrix of opinions on covid vaccine'))
 
 
-# TODO: Refaire du nettoyage
-#TODO: updater codes latex / remettre les df en pourcentages
+
+# TODO: updater codes latex / remettre les df en pourcentages
+# TODO: study questions that are at the end of the survey\
+# TODO: study open answers
