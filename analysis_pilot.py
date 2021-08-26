@@ -92,6 +92,14 @@ for profession in [u'Agriculteur/rice', u'Artisan, commerçant(e), chef(fe) d\'e
         float(len(data_pilot['full'][data_pilot['full']['profession_type']=='{}'.format(profession)])) / len(data_pilot['full'])
 del profession
 
+dict_survey_statistics['socio_demographics']['diploma'] = {}
+for diploma in [u'Aucun diplôme', u'Brevet des collèges', u'CAP ou BEP', u'Baccalauréat',
+                u'Bac +2 (BTS, DUT, DEUG, écoles de formation sanitaires et sociales...)', u'Bac +3 (licence...)',
+                u'Bac +5 ou plus (master, école d\'ingénieur ou de commerce, doctorat, médecine, maîtrise, DEA, DESS...)']:
+    dict_survey_statistics['socio_demographics']['diploma'][diploma] = \
+        float(len(data_pilot['full'][data_pilot['full']['diploma']=='{}'.format(diploma)])) / len(data_pilot['full'])
+del diploma
+
 for var in ['household_size', 'nb_above_14', 'income_respondent', 'income_household']:
     dict_survey_statistics['socio_demographics'][var] = {}
     dict_survey_statistics['socio_demographics'][var]['mean'] = data_pilot['full'][var].mean()
@@ -236,29 +244,61 @@ items_matrix_respondent = [u'Pas du tout pertinent', u'Peu pertinent', u'NSP (Ne
 items_matrix_french = [u'Une très petite minorité', u'Une minorité', u'NSP (Ne sait pas, ne se prononce pas)',
                        u'La moitié', u'La majorité', u'La très grande majorité']
 
-dict_matrix_respondents = {}
+dict_matrices_arguments = {}
+dict_matrices_arguments['respondents'] = {}
 for topic in ['meat', 'airtravel', 'vehicle', 'vaccine']:
     variables_topic = list()
     for var in variables_survey:
         if 'matrix_respondent_{}'.format(topic) in var and '_num' not in var:
             variables_topic.append(var)
-    dict_matrix_respondents[topic] = pd.DataFrame(index=variables_topic, columns=items_matrix_respondent, dtype=float)
+    dict_matrices_arguments['respondents'][topic] = pd.DataFrame(index=variables_topic, columns=items_matrix_respondent, dtype=float)
     for var in variables_topic:
         for answer in items_matrix_respondent:
-            dict_matrix_respondents[topic][answer][var] = float(len(data_pilot['matrix_respondent'][data_pilot['matrix_respondent'][var] == answer])) / len(data_pilot['matrix_respondent'])
+            dict_matrices_arguments['respondents'][topic][answer][var] = float(len(data_pilot['matrix_respondent'][data_pilot['matrix_respondent'][var] == answer])) / len(data_pilot['matrix_respondent'])
 
-dict_matrix_french = {}
+dict_matrices_arguments['french'] = {}
 for topic in ['meat', 'airtravel', 'vehicle', 'vaccine']:
     variables_topic = list()
     for var in variables_survey:
         if 'matrix_french_{}'.format(topic) in var and '_num' not in var:
             variables_topic.append(var)
-    dict_matrix_french[topic] = pd.DataFrame(index=variables_topic, columns=items_matrix_french, dtype=float)
+    dict_matrices_arguments['french'][topic] = pd.DataFrame(index=variables_topic, columns=items_matrix_french, dtype=float)
     for var in variables_topic:
         for answer in items_matrix_french:
-            dict_matrix_french[topic][answer][var] = float(len(data_pilot['matrix_french'][data_pilot['matrix_french'][var] == answer])) / len(data_pilot['matrix_french'])
+            dict_matrices_arguments['french'][topic][answer][var] = float(len(data_pilot['matrix_french'][data_pilot['matrix_french'][var] == answer])) / len(data_pilot['matrix_french'])
 
-del items_matrix_respondent, items_matrix_french, variables_survey, variables_topic, topic, var, answer
+dict_matrices_arguments['çomparison_average_score'] = {}
+for topic in ['meat', 'airtravel', 'vehicle', 'vaccine']:
+    variables_topic_respondent = list()
+    variables_topic_french = list()
+    for var in variables_survey:
+        if 'matrix_respondent_{}'.format(topic) in var and '_num' in var:
+            variables_topic_respondent.append(var)
+        elif 'matrix_french_{}'.format(topic) in var and '_num' in var:
+            variables_topic_french.append(var)
+    variables_topic_joint = [var.replace('matrix_french_', '') for var in variables_topic_french]
+    dict_matrices_arguments['çomparison_average_score'][topic] = \
+        pd.DataFrame(index=variables_topic_joint,
+            columns=['score_respondents', 'score_french', 'difference', 'opposite_sign'],
+            dtype=float)
+    for var in variables_topic_joint:
+        dict_matrices_arguments['çomparison_average_score'][topic]['score_respondents'][var] = data_pilot['matrix_respondent']['matrix_respondent_'+var].mean()
+        dict_matrices_arguments['çomparison_average_score'][topic]['score_french'][var] = data_pilot['matrix_french']['matrix_french_'+var].mean()
+        dict_matrices_arguments['çomparison_average_score'][topic]['difference'][var] = (
+            dict_matrices_arguments['çomparison_average_score'][topic]['score_respondents'][var]
+            - dict_matrices_arguments['çomparison_average_score'][topic]['score_french'][var]
+            )
+        dict_matrices_arguments['çomparison_average_score'][topic]['opposite_sign'][var] = (
+            dict_matrices_arguments['çomparison_average_score'][topic]['score_respondents'][var]
+            * dict_matrices_arguments['çomparison_average_score'][topic]['score_french'][var]
+            ) < 0
+
+del(items_matrix_respondent, items_matrix_french, variables_survey, variables_topic,
+     variables_topic_joint, variables_topic_respondent, variables_topic_french, topic, var, answer)
+
+
+# TODO: categorize arguments depending on whether they are for/against and do summary statistics
+
 ### Meat
 
 
