@@ -538,6 +538,5 @@ del argument, arguments_topic, element, item, items_desirable_vaccine, items_res
 #print(df_transition_matrix_vaccine.to_latex(caption='Matrix of opinions on covid vaccine'))
 
 # TODO: updater codes latex
-# TODO: study questions that are at the end of the survey
-# TODO: study open answers
+# TODO: study open answers -> export in another file where text can be read easily
 # TODO: check if there is a way to create sections in the script
