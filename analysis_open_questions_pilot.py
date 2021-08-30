@@ -43,8 +43,8 @@ answers_meat_landscape_argument_open = data_pilot['meat']['meat_landscape_argume
 answers_meat_landscape_argument_open.to_csv(r'C:\Users\TDOUENN\Documents\Projects\Narratives\Data\Text_open_questions\Meat\meat_landscape_argument.csv',
                             sep=';', encoding='utf-8-sig', index=True)
 
-answers_meat_carbon_argument_open = data_pilot['meat']['meat_carbon_argument_open'].dropna()
-answers_meat_carbon_argument_open.to_csv(r'C:\Users\TDOUENN\Documents\Projects\Narratives\Data\Text_open_questions\Meat\meat_carbon_argument.csv',
+answers_meat_carbon_footprint_argument_open = data_pilot['meat']['meat_carbon_footprint_argument_open'].dropna()
+answers_meat_carbon_footprint_argument_open.to_csv(r'C:\Users\TDOUENN\Documents\Projects\Narratives\Data\Text_open_questions\Meat\meat_carbon_footprint_argument.csv',
                             sep=';', encoding='utf-8-sig', index=True)
 
 dict_tags_meat = {}
@@ -174,8 +174,8 @@ answers_airtravel_open_mindedness_argument_open = data_pilot['airtravel']['airtr
 answers_airtravel_open_mindedness_argument_open.to_csv(r'C:\Users\TDOUENN\Documents\Projects\Narratives\Data\Text_open_questions\Airtravel\airtravel_open_mindedness_argument.csv',
                             sep=';', encoding='utf-8-sig', index=True)
 
-answers_airtravel_carbon_argument_open = data_pilot['airtravel']['airtravel_carbon_argument_open'].dropna()
-answers_airtravel_carbon_argument_open.to_csv(r'C:\Users\TDOUENN\Documents\Projects\Narratives\Data\Text_open_questions\Airtravel\airtravel_carbon_argument.csv',
+answers_airtravel_carbon_footprint_argument_open = data_pilot['airtravel']['airtravel_carbon_footprint_argument_open'].dropna()
+answers_airtravel_carbon_footprint_argument_open.to_csv(r'C:\Users\TDOUENN\Documents\Projects\Narratives\Data\Text_open_questions\Airtravel\airtravel_carbon_argument.csv',
                             sep=';', encoding='utf-8-sig', index=True)
 
 dict_tags_airtravel = {}
@@ -552,8 +552,137 @@ dict_tags_vaccine['protecting_others_argument'] = {
     }
 
 
-# TODO: count the share of answered
+# TODO: FInish these tags
+
+
+
+
+
+##### Descriptive statistics lenght open-ended answers
+
+### Meat
+data_pilot['meat']['asked_why_against'] = (
+    1*(data_pilot['meat']['meat_frequency_desirable'] == 'jamais')
+    + 1*(data_pilot['meat']['meat_frequency_desirable'] == u'très occasionnellement')
+    + 1*(data_pilot['meat']['meat_frequency_desirable'] == '1 à 2 repas par semaine')
+    )
+data_pilot['meat']['asked_why_neutral'] = (
+    1*(data_pilot['meat']['meat_frequency_desirable'] == u'NSP (Ne sait pas, ne se prononce pas).')
+    )
+data_pilot['meat']['asked_why_favorable'] = (
+    1 - data_pilot['meat']['asked_why_against'] - data_pilot['meat']['asked_why_neutral']
+    )
+data_pilot['meat']['asked_landscape_argument'] = (
+    data_pilot['meat']['asked_why_against'] + data_pilot['meat']['asked_why_neutral']
+    )
+data_pilot['meat']['asked_carbon_footprint_argument'] = data_pilot['meat']['asked_why_favorable']
+
+dict_text_meat = {}
+for question in ['why_against', 'why_neutral', 'why_favorable', 'landscape_argument', 'carbon_footprint_argument']:
+    data_pilot['meat']['nb_words_meat_{}_open'.format(question)] = data_pilot['meat']['meat_{}_open'.format(question)].str.len()
+    dict_text_meat[question] = {}
+
+    dict_text_meat[question]['nb_asked'] = data_pilot['meat']['asked_{}'.format(question)].sum()
+    dict_text_meat[question]['nb_answered'] = len(data_pilot['meat'][data_pilot['meat']['nb_words_meat_{}_open'.format(question)] > 0])
+    dict_text_meat[question]['length_answer_mean'] = data_pilot['meat']['nb_words_meat_{}_open'.format(question)].mean()
+    for i in [10,25,50,75,90]:
+        dict_text_meat[question]['length_answer_percentile_{}'.format(i)] = \
+            data_pilot['meat']['nb_words_meat_{}_open'.format(question)].quantile(i/100)
+    dict_text_meat[question]['length_answer_max'] = data_pilot['meat']['nb_words_meat_{}_open'.format(question)].max()
+
+
+### Airtravel
+data_pilot['airtravel']['asked_why_against'] = (
+    1*(data_pilot['airtravel']['airtravel_frequency_desirable'] == 'jamais')
+    + 1*(data_pilot['airtravel']['airtravel_frequency_desirable'] == u'au moins une fois dans leur vie')
+    )
+data_pilot['airtravel']['asked_why_neutral'] = (
+    1*(data_pilot['airtravel']['airtravel_frequency_desirable'] == u'NSP (Ne sait pas, ne se prononce pas).')
+    )
+data_pilot['airtravel']['asked_why_favorable'] = (
+    1 - data_pilot['airtravel']['asked_why_against'] - data_pilot['airtravel']['asked_why_neutral']
+    )
+data_pilot['airtravel']['asked_open_mindedness_argument'] = (
+    data_pilot['airtravel']['asked_why_against'] + data_pilot['airtravel']['asked_why_neutral']
+    )
+data_pilot['airtravel']['asked_carbon_footprint_argument'] = data_pilot['airtravel']['asked_why_favorable']
+
+dict_text_airtravel = {}
+for question in ['why_against', 'why_neutral', 'why_favorable', 'open_mindedness_argument', 'carbon_footprint_argument']:
+    data_pilot['airtravel']['nb_words_airtravel_{}_open'.format(question)] = data_pilot['airtravel']['airtravel_{}_open'.format(question)].str.len()
+    dict_text_airtravel[question] = {}
+
+    dict_text_airtravel[question]['nb_asked'] = data_pilot['airtravel']['asked_{}'.format(question)].sum()
+    dict_text_airtravel[question]['nb_answered'] = len(data_pilot['airtravel'][data_pilot['airtravel']['nb_words_airtravel_{}_open'.format(question)] > 0])
+    dict_text_airtravel[question]['length_answer_mean'] = data_pilot['airtravel']['nb_words_airtravel_{}_open'.format(question)].mean()
+    for i in [10,25,50,75,90]:
+        dict_text_airtravel[question]['length_answer_percentile_{}'.format(i)] = \
+            data_pilot['airtravel']['nb_words_airtravel_{}_open'.format(question)].quantile(i/100)
+    dict_text_airtravel[question]['length_answer_max'] = data_pilot['airtravel']['nb_words_airtravel_{}_open'.format(question)].max()
+
+
+### Vehicle
+data_pilot['vehicle']['asked_why_against'] = (
+    1*(data_pilot['vehicle']['vehicle_desirable_future'] == u'de cesser de les utiliser très rapidement (d\'ici 2030 ou avant)')
+    + 1*(data_pilot['vehicle']['vehicle_desirable_future'] == u'de cesser de les utiliser progressivement (d\'ici 2040 ou 2050)')
+    )
+data_pilot['vehicle']['asked_why_neutral'] = (
+    1*(data_pilot['vehicle']['vehicle_desirable_future'] == u'NSP (Ne sait pas, ne se prononce pas).')
+    )
+data_pilot['vehicle']['asked_why_diesel'] = (
+    1*(data_pilot['vehicle']['vehicle_desirable_future'] == u'de cesser d\'utiliser les véhicules diesel mais pas les véhicule essence')
+    )
+data_pilot['vehicle']['asked_why_favorable'] = (
+    1 - data_pilot['vehicle']['asked_why_against'] - data_pilot['vehicle']['asked_why_neutral'] - data_pilot['vehicle']['asked_why_diesel']
+    )
+data_pilot['vehicle']['asked_electric_pollutes_more_argument'] = (
+    data_pilot['vehicle']['asked_why_against'] + data_pilot['vehicle']['asked_why_neutral']
+    )
+data_pilot['vehicle']['asked_thermal_pollutes_more_argument'] = 1 - data_pilot['vehicle']['asked_electric_pollutes_more_argument']
+
+dict_text_vehicle = {}
+for question in ['why_against', 'why_neutral', 'why_favorable', 'electric_pollutes_more_argument', 'thermal_pollutes_more_argument']:
+    data_pilot['vehicle']['nb_words_vehicle_{}_open'.format(question)] = data_pilot['vehicle']['vehicle_{}_open'.format(question)].str.len()
+    dict_text_vehicle[question] = {}
+
+    dict_text_vehicle[question]['nb_asked'] = data_pilot['vehicle']['asked_{}'.format(question)].sum()
+    dict_text_vehicle[question]['nb_answered'] = len(data_pilot['vehicle'][data_pilot['vehicle']['nb_words_vehicle_{}_open'.format(question)] > 0])
+    dict_text_vehicle[question]['length_answer_mean'] = data_pilot['vehicle']['nb_words_vehicle_{}_open'.format(question)].mean()
+    for i in [10,25,50,75,90]:
+        dict_text_vehicle[question]['length_answer_percentile_{}'.format(i)] = \
+            data_pilot['vehicle']['nb_words_vehicle_{}_open'.format(question)].quantile(i/100)
+    dict_text_vehicle[question]['length_answer_max'] = data_pilot['vehicle']['nb_words_vehicle_{}_open'.format(question)].max()
+
+
+### Vaccine
+data_pilot['vaccine']['asked_why_against'] = (
+    1*(data_pilot['vaccine']['vaccine_desirable'] == u'tous les Français se fassent vacciner à partir de 12 ans')
+    + 1*(data_pilot['vaccine']['vaccine_desirable'] == u'tous les Français se fassent vacciner à partir de 18 ans')
+    )
+data_pilot['vaccine']['asked_why_neutral'] = (
+    1*(data_pilot['vaccine']['vaccine_desirable'] == u'NSP (Ne sait pas, ne se prononce pas).')
+    )
+data_pilot['vaccine']['asked_why_favorable'] = (
+    1 - data_pilot['vaccine']['asked_why_against'] - data_pilot['vaccine']['asked_why_neutral']
+    )
+data_pilot['vaccine']['asked_poor_country_argument'] = (
+    data_pilot['vaccine']['asked_why_against'] + data_pilot['vaccine']['asked_why_neutral']
+    )
+data_pilot['vaccine']['asked_protecting_others_argument'] = 1 - data_pilot['vaccine']['asked_poor_country_argument']
+
+dict_text_vaccine = {}
+for question in ['why_against', 'why_neutral', 'why_favorable', 'poor_country_argument', 'protecting_others_argument']:
+    data_pilot['vaccine']['nb_words_vaccine_{}_open'.format(question)] = data_pilot['vaccine']['vaccine_{}_open'.format(question)].str.len()
+    dict_text_vaccine[question] = {}
+
+    dict_text_vaccine[question]['nb_asked'] = data_pilot['vaccine']['asked_{}'.format(question)].sum()
+    dict_text_vaccine[question]['nb_answered'] = len(data_pilot['vaccine'][data_pilot['vaccine']['nb_words_vaccine_{}_open'.format(question)] > 0])
+    dict_text_vaccine[question]['length_answer_mean'] = data_pilot['vaccine']['nb_words_vaccine_{}_open'.format(question)].mean()
+    for i in [10,25,50,75,90]:
+        dict_text_vaccine[question]['length_answer_percentile_{}'.format(i)] = \
+            data_pilot['vaccine']['nb_words_vaccine_{}_open'.format(question)].quantile(i/100)
+    dict_text_vaccine[question]['length_answer_max'] = data_pilot['vaccine']['nb_words_vaccine_{}_open'.format(question)].max()
+
 # TODO: Do some stats over tags
 # TODO: Display most common words
-# TODO: Compute average / median / distribution number of words
 # TODO: treat end of survey end box
