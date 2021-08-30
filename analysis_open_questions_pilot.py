@@ -131,23 +131,6 @@ dict_tags_meat['carbon_footprint_argument'] = {
     'Unclear_undetermined': [72,226,280,375,579,620,968],
     }
 
-data_pilot['meat']['asked_why_against'] = (
-    1*(data_pilot['meat']['meat_frequency_desirable'] == 'jamais')
-    + 1*(data_pilot['meat']['meat_frequency_desirable'] == u'très occasionnellement')
-    + 1*(data_pilot['meat']['meat_frequency_desirable'] == '1 à 2 repas par semaine')
-    )
-data_pilot['meat']['asked_why_neutral'] = (
-    1*(data_pilot['meat']['meat_frequency_desirable'] == u'NSP (Ne sait pas, ne se prononce pas).')
-    )
-data_pilot['meat']['asked_why_favorable'] = (
-    1 - data_pilot['meat']['asked_why_against'] - data_pilot['meat']['asked_why_neutral']
-    )
-data_pilot['meat']['asked_landscape_argument'] = (
-    data_pilot['meat']['asked_why_against'] + data_pilot['meat']['asked_why_neutral']
-    )
-data_pilot['meat']['asked_carbon_footrpint_argument'] = data_pilot['meat']['asked_why_favorable']
-
-
 data_pilot['meat']['tags_answer_why_against'] = ''
 for element in dict_tags_meat['why_against'].keys():
     data_pilot['meat'].loc[dict_tags_meat['why_against'][element],'tags_answer_why_against'] = \
@@ -304,9 +287,273 @@ for element in dict_tags_airtravel['carbon_footprint_argument'].keys():
         element + ';' + data_pilot['airtravel'].loc[dict_tags_airtravel['carbon_footprint_argument'][element],'tags_answer_carbon_footprint_argument']
 
 
+##### Vehicle
+answers_vehicle_why_against_open = data_pilot['vehicle']['vehicle_why_against_open'].dropna()
+answers_vehicle_why_against_open.to_csv(r'C:\Users\TDOUENN\Documents\Projects\Narratives\Data\Text_open_questions\Vehicle\vehicle_why_against.csv',
+                            sep=';', encoding='utf-8-sig', index=True)
 
+answers_vehicle_why_favorable_open = data_pilot['vehicle']['vehicle_why_favorable_open'].dropna()
+answers_vehicle_why_favorable_open.to_csv(r'C:\Users\TDOUENN\Documents\Projects\Narratives\Data\Text_open_questions\Vehicle\vehicle_why_favorable.csv',
+                            sep=';', encoding='utf-8-sig', index=True)
+
+answers_vehicle_why_diesel_open = data_pilot['vehicle']['vehicle_why_diesel_open'].dropna()
+answers_vehicle_why_diesel_open.to_csv(r'C:\Users\TDOUENN\Documents\Projects\Narratives\Data\Text_open_questions\Vehicle\vehicle_why_diesel.csv',
+                            sep=';', encoding='utf-8-sig', index=True)
+
+answers_vehicle_why_neutral_open = data_pilot['vehicle']['vehicle_why_neutral_open'].dropna()
+answers_vehicle_why_neutral_open.to_csv(r'C:\Users\TDOUENN\Documents\Projects\Narratives\Data\Text_open_questions\Vehicle\vehicle_why_neutral.csv',
+                            sep=';', encoding='utf-8-sig', index=True)
+
+answers_vehicle_electric_pollutes_more_argument_open = data_pilot['vehicle']['vehicle_electric_pollutes_more_argument_open'].dropna()
+answers_vehicle_electric_pollutes_more_argument_open.to_csv(r'C:\Users\TDOUENN\Documents\Projects\Narratives\Data\Text_open_questions\Vehicle\vehicle_electric_pollutes_more_argument.csv',
+                            sep=';', encoding='utf-8-sig', index=True)
+
+answers_vehicle_thermal_pollutes_more_argument_open = data_pilot['vehicle']['vehicle_thermal_pollutes_more_argument_open'].dropna()
+answers_vehicle_thermal_pollutes_more_argument_open.to_csv(r'C:\Users\TDOUENN\Documents\Projects\Narratives\Data\Text_open_questions\Vehicle\vehicle_thermal_pollutes_more_argument.csv',
+                            sep=';', encoding='utf-8-sig', index=True)
+
+dict_tags_vehicle = {}
+dict_tags_vehicle['why_against'] = {
+    'Environment': [10,11,27,33,87,102,105,111,116,134,137,195,199,206,222,223,243,251,
+                    256,289,295,309,316,331,383,404,439,443,454,480,717,723,804,822,938,
+                    1186,3233,3234,3377],
+    'Climate_change': [87,111,199,206,223,243,251,383,439,480,723,822,3234],
+    'Air_pollution': [105,331,938,3377],
+    'Good_alternatives_exist': [195,256,804,938,986],
+    'Save_money': [256,309,454],
+    'Reduce_energy_dependency': [331,454],
+    'Dont_know': [68,341],
+    'Unclear_undetermined': [27,134,598],
+    }
+
+dict_tags_vehicle['why_favorable'] = {
+    'EV_pollute_as_much_or_more': [39,47,127,156,244,257,275,319,329,342,354,379,
+                                   395,401,444,654,673,905],
+    'EV_construction_pollutes': [39,49,329,354,401,654,740],
+    'Electricity_generation_pollutes': [39,257,329,354,394,415,654],
+    'Batteries_pollute': [60,156,236,257,342,354,369,401,415,654,887],
+    'Lower_cost': [35,59,99,168,202,244,266,299,304,337,371,379,395,435,458,
+                   469,672,740,777,942,991,1011,1229,1277],
+    'EV_not_convenient': [59,60,99,125,182,187,236,241,257,342,369,387,394,395,
+                          415,435,447,458,528,551,561,3220,3294],
+    'Lack_infrastructures': [99,325,369,387,394,458,654,1852],
+    'Uncertainties': [127,1011],
+    'Fiability': [99,127,148,293,325,337,584,761,1117,1229,1852,3774],
+    'Requires_more_nuclear': [354,394,2197],
+    'New_thermal_cleaner': [371,469,486],
+    'Rural_areas': [325,447,486,777],
+    'Poor_people_cannot': [59,299,304,371,379,395,777,991,1011,1205,1277],
+    'Other_things_pollute_more': [319,371],
+    'Impact_poor_countries': [415,740],
+    'Protect_economy': [2197],
+    'Favor_bio_energies': [740],
+    'Favor_hydrogen': [39,60],
+    'Opposite_argument': [1011,3294],
+    'Dont_know': [],
+    'Unclear_undetermined': [40,77,96,193,372,464,693],
+    }
+
+dict_tags_vehicle['why_diesel'] = {
+    'Environment': [13,70,76,85,141,159,227,273,324,403,414,796],
+    'Air_pollution': [13,141],
+    'Batteries_pollute': [85],
+    'New_thermal_cleaner': [70],
+    'Cost_EV': [414],
+    'Poor_people_cannot_EV': [414],
+    'Dont_know': [510],
+    'Unclear_undetermined': [129,268],
+    }
+
+dict_tags_vehicle['why_neutral'] = {
+    'Environment': [58,422,473,540],
+    'Batteries_pollute': [58],
+    'Favor_bio_energies': [163],
+    'Less_convenient': [422],
+    'Cost': [473,540],
+    'Fiability': [1104],
+    'Dont_know': [24,296,426,1008],
+    'Unclear_undetermined': [540],
+    }
+
+dict_tags_vehicle['electric_pollutes_more_argument'] = {
+    'Agree': [10,11,24,87,105,163,222,256,296,383,540,598,723,3234,3377],
+    'Not_true': [58,116,134,137,195,199,206,289,295,404,439,443,454,473,480,
+                 717,804,1186],
+    'It_depends': [10,111,179,222,223,331,422,938,986,3233,3234,3377],
+    'Uncertain': [27,105,295,439,454,473,480,723,822,1104],
+    'Batteries_pollute': [11,24,27,33,87,105,111,163,179,206,222,223,251,256,
+                          309,331,598,938,986],
+    'Nuclear': [540,598,3377],
+    'Less_local_pollution': [243,443],
+    'Impact_poor_countries': [540],
+    'Unrelated_opposite_argument': [],
+    'Dont_know': [68,102,316,341,426,1008],
+    'Unclear_undetermined': [],
+    }
+
+dict_tags_vehicle['thermal_pollutes_more_argument'] = {
+    'Agree': [60,71,99,125,127,141,156,227,236,268,293,299,324,325,337,342,354,
+              371,387,394,395,435,469,551,672,673,777,898,942,991,1117,1229,
+              1277],
+    'Not_true': [39,40,47,59,76,85,129,241,244,257,266,275,319,329,372,415,444,
+                 464,584,693,761,887,2197,3294],
+    'It_depends': [13,60,148,354,369,379,394,401,469,3220],
+    'Uncertain': [99,129,168,182,202,227,241,244,266,275,293,325,372,387,395,
+                  403,458,528,584,654,777,796,887,1852],
+    'Batteries_pollute': [39,59,60,85,156,159,182,241,342,387,395,401,528,551,
+                          561,654,991,1205],
+    'EV_construction_pollutes': [39,129,148,182,202,257,369,387,464,654,887,
+                                 2197,3220,3294],
+    'Electricity_generation_pollutes': [13,39,85,99,319,379,403,464,469,796,
+                                        1205,2197],
+    'Nuclear': [13,319,403,464,1205],
+    'Less_local_pollution': [],
+    'Impact_poor_countries': [],
+    'Unrelated_opposite_argument': [268,337,342,354,387,528,561,672,991,1277,
+                                    1852],
+    'Dont_know': [35,47,70,96,159,193,273,304,414,447,486,510,561,621,740,
+                  905,3774],
+    'Unclear_undetermined': [77,187,1011],
+    }
+
+
+data_pilot['vehicle']['tags_answer_why_against'] = ''
+for element in dict_tags_vehicle['why_against'].keys():
+    data_pilot['vehicle'].loc[dict_tags_vehicle['why_against'][element],'tags_answer_why_against'] = \
+        element + ';' + data_pilot['vehicle'].loc[dict_tags_vehicle['why_against'][element],'tags_answer_why_against']
+
+data_pilot['vehicle']['tags_answer_why_neutral'] = ''
+for element in dict_tags_vehicle['why_neutral'].keys():
+    data_pilot['vehicle'].loc[dict_tags_vehicle['why_neutral'][element],'tags_answer_why_neutral'] = \
+        element + ';' + data_pilot['vehicle'].loc[dict_tags_vehicle['why_neutral'][element],'tags_answer_why_neutral']
+
+data_pilot['vehicle']['tags_answer_why_diesel'] = ''
+for element in dict_tags_vehicle['why_diesel'].keys():
+    data_pilot['vehicle'].loc[dict_tags_vehicle['why_diesel'][element],'tags_answer_why_diesel'] = \
+        element + ';' + data_pilot['vehicle'].loc[dict_tags_vehicle['why_diesel'][element],'tags_answer_why_diesel']
+
+data_pilot['vehicle']['tags_answer_why_favorable'] = ''
+for element in dict_tags_vehicle['why_favorable'].keys():
+    data_pilot['vehicle'].loc[dict_tags_vehicle['why_favorable'][element],'tags_answer_why_favorable'] = \
+        element + ';' + data_pilot['vehicle'].loc[dict_tags_vehicle['why_favorable'][element],'tags_answer_why_favorable']
+
+data_pilot['vehicle']['tags_answer_electric_pollutes_more_argument'] = ''
+for element in dict_tags_vehicle['electric_pollutes_more_argument'].keys():
+    data_pilot['vehicle'].loc[dict_tags_vehicle['electric_pollutes_more_argument'][element],'tags_answer_electric_pollutes_more_argument'] = \
+        element + ';' + data_pilot['vehicle'].loc[dict_tags_vehicle['electric_pollutes_more_argument'][element],'tags_answer_electric_pollutes_more_argument']
+
+data_pilot['vehicle']['tags_answer_thermal_pollutes_more_argument'] = ''
+for element in dict_tags_vehicle['thermal_pollutes_more_argument'].keys():
+    data_pilot['vehicle'].loc[dict_tags_vehicle['thermal_pollutes_more_argument'][element],'tags_answer_thermal_pollutes_more_argument'] = \
+        element + ';' + data_pilot['vehicle'].loc[dict_tags_vehicle['thermal_pollutes_more_argument'][element],'tags_answer_thermal_pollutes_more_argument']
+
+
+##### Vaccine
+answers_vaccine_why_against_open = data_pilot['vaccine']['vaccine_why_against_open'].dropna()
+answers_vaccine_why_against_open.to_csv(r'C:\Users\TDOUENN\Documents\Projects\Narratives\Data\Text_open_questions\Vaccine\vaccine_why_against.csv',
+                            sep=';', encoding='utf-8-sig', index=True)
+
+answers_vaccine_why_favorable_open = data_pilot['vaccine']['vaccine_why_favorable_open'].dropna()
+answers_vaccine_why_favorable_open.to_csv(r'C:\Users\TDOUENN\Documents\Projects\Narratives\Data\Text_open_questions\Vaccine\vaccine_why_favorable.csv',
+                            sep=';', encoding='utf-8-sig', index=True)
+
+answers_vaccine_why_neutral_open = data_pilot['vaccine']['vaccine_why_neutral_open'].dropna()
+answers_vaccine_why_neutral_open.to_csv(r'C:\Users\TDOUENN\Documents\Projects\Narratives\Data\Text_open_questions\Vaccine\vaccine_why_neutral.csv',
+                            sep=';', encoding='utf-8-sig', index=True)
+
+answers_vaccine_poor_country_argument_open = data_pilot['vaccine']['vaccine_poor_country_argument_open'].dropna()
+answers_vaccine_poor_country_argument_open.to_csv(r'C:\Users\TDOUENN\Documents\Projects\Narratives\Data\Text_open_questions\Vaccine\vaccine_poor_country_argument.csv',
+                            sep=';', encoding='utf-8-sig', index=True)
+
+answers_vaccine_protecting_others_argument_open = data_pilot['vaccine']['vaccine_protecting_others_argument_open'].dropna()
+answers_vaccine_protecting_others_argument_open.to_csv(r'C:\Users\TDOUENN\Documents\Projects\Narratives\Data\Text_open_questions\Vaccine\vaccine_protecting_others_argument.csv',
+                            sep=';', encoding='utf-8-sig', index=True)
+
+dict_tags_vaccine = {}
+dict_tags_vaccine['why_against'] = {
+    'Health_risk_vaccin': [15,284,987],
+    'Anti_vaccins': [172],
+    'Lack_hindsight': [284,411,987],
+    'Distrust': [172,306,534],
+    'Small_benefits_vaccin': [904],
+    'Finances_industry': [172,306],
+    'Opposite_argument': [],
+    'Dont_know': [122],
+    'Unclear_undetermined': [18,382],
+    }
+
+dict_tags_vaccine['why_favorable'] = {
+    'End_this_situation': [21,30,61,131,145,203,221,276,281,362,365,416,455,
+                           665,750,771,817,953,1271,1770,2223,3240],
+    'Reach_collective_immunity': [37,61,73,82,115,131,155,162,164,176,189,221,
+                                  290,321,328,399,413,416,455,482,665,750,771,
+                                  793,882,1770,3240],
+    'Avoid_lockdowns': [38,298,328,515],
+    'Avoid_new_wave': [245,264,290,487,559],
+    'Safer': [45,56,210,265,272,340,434,451,687,716,814,901,966,3222],
+    'Avoid_variants': [48,203,253,290,559,611,690],
+    'Avoid_transmissions': [55,164,173,190,194,209,230,245,253,264,265,267,276,
+                            298,340,353,384,399,440,478,687,3222,3245],
+    'Limit_serious_cases': [115,190,276,559],
+    'Avoid_hospital_overload': [276,314],
+    'Moral_responsibility': [276,336,413],
+    'Economic_activity': [276],
+    'Opposite_argument': [314],
+    'Dont_know': [],
+    'Unclear_undetermined': [314],
+    }# Note: by contrast with 'Reach_collective_immunity', the item 'Avoid_transmissions' does not explicitely refer to reaching a state where the virus disappears
+# When people refer to 'eradiquer la pandemie', it is understood that they refer to all its implications so 'End_this_situation' is also applied, while 'eradiquer le virus' is simply understood as 'Reach_collective_immunity'
+# Safer often refers to more personal considerations
+
+dict_tags_vaccine['why_neutral'] = {
+    'End_this_situation': [31,130,393,445,852,881,3227],
+    'Reach_collective_immunity': [54,65,130,320,391,405,445,775,1002],
+    'Avoid_lockdowns': [219],
+    'Avoid_new_wave': [101,219],
+    'Safer': [150,153,352,539,635,852,899],
+    'Avoid_variants': [363],
+    'Avoid_transmissions': [101,106,113,130,323,463,472,832],
+    'Limit_serious_cases': [101,263,277,539,899],
+    'Moral_responsibility': [153],
+    'Economic_activity': [277],
+    'Avoid_hospital_overload': [101,472],
+    'Other_mandatory_vaccines_exist': [707],
+    'Uncertainty_efficacy': [54,109,320],
+    'Health_risk_vaccin': [92,93,101,151,153,208,213,220,323,445,446,726,852,881],
+    'Anti_vaccins': [],
+    'Lack_hindsight': [93,101,151,208,213,220,323,333,445,446,645,852],
+    'Distrust': [208,3257],
+    'Small_benefits_vaccin': [121,238,492],
+    'Could_generate_complotism': [65],
+    'Everyone_should_be_free': [113,130,238,263,393,472,547,3257,3347],
+    'Finances_industry': [533],
+    'Dont_know': [67,132,370,421,441,609,645],
+    'Unclear_undetermined':[9,327,376],
+    }
+
+dict_tags_vaccine['poor_country_argument'] = {
+    'Agree': [],
+    'Not_true': [],
+    'It_depends': [],
+    'Uncertain': [],
+    'Unrelated_opposite_argument': [],
+    'Dont_know': [],
+    'Unclear_undetermined': [],
+    }
+
+dict_tags_vaccine['protecting_others_argument'] = {
+    'Agree': [],
+    'Not_true': [],
+    'It_depends': [],
+    'Uncertain': [],
+    'Unrelated_opposite_argument': [],
+    'Dont_know': [],
+    'Unclear_undetermined': [],
+    }
 
 
 # TODO: count the share of answered
-# Do some stats over tags
-# Display most common words
+# TODO: Do some stats over tags
+# TODO: Display most common words
+# TODO: Compute average / median / distribution number of words
+# TODO: treat end of survey end box

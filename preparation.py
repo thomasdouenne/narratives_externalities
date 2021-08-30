@@ -62,7 +62,7 @@ data_qualtrics_renamed = data_qualtrics_raw.rename(
              'Q100': 'vehicle_why_favorable_open',
              'Q101.1': 'vehicle_why_neutral_open',
              'Q102.1': 'vehicle_electric_pollutes_more_argument_open',
-             'Q103.1': 'vehicle_thermiaue_pollutes_more_argument_open',
+             'Q103.1': 'vehicle_thermal_pollutes_more_argument_open',
              'Q85': 'vaccine_respondent',
              'Q98.1': 'vaccine_third_dose_respondent',
              'Q88': 'vaccine_desirable',
