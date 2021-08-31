@@ -123,7 +123,7 @@ data_qualtrics_renamed = data_qualtrics_raw.rename(
              'Q21': 'cc_consequences',
              'Q22': 'cc_responsible',
              'Q121': 'trust_scientists',
-             'Q63': 'open_box_end'
+             'Q63': 'end_of_survey_box'
              }
           ).copy()
 

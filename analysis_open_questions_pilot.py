@@ -22,7 +22,7 @@ data_pilot['vehicle'] = data_pilot['full'].query('topic_vehicle == 1').copy()
 data_pilot['vaccine'] = data_pilot['full'].query('topic_vaccine == 1').copy()
 
 ##### End of survey box
-answers_open_end_box = data_pilot['full']['open_box_end'].dropna()
+answers_open_end_box = data_pilot['full']['end_of_survey_box'].dropna()
 answers_open_end_box.to_csv(r'C:\Users\TDOUENN\Documents\Projects\Narratives\Data\Text_open_questions\open_end_box.csv',
                             sep=';', encoding='utf-8-sig', index=True)
 
@@ -692,6 +692,20 @@ for question in ['why_against', 'why_neutral', 'why_favorable', 'poor_country_ar
         dict_text_vaccine[question]['length_answer_percentile_{}'.format(i)] = \
             data_pilot['vaccine']['nb_words_vaccine_{}_open'.format(question)].quantile(i/100)
     dict_text_vaccine[question]['length_answer_max'] = data_pilot['vaccine']['nb_words_vaccine_{}_open'.format(question)].max()
+
+
+### End of survey box
+data_pilot['full']['nb_words_end_of_survey_box_open'] = data_pilot['full']['end_of_survey_box'].str.len()
+dict_text_end_survey = {}
+
+dict_text_end_survey['nb_asked'] = len(data_pilot['full'])
+dict_text_end_survey['nb_answered'] = len(data_pilot['full'].query('nb_words_end_of_survey_box_open > 0'))
+dict_text_end_survey['length_answer_mean'] = data_pilot['full']['nb_words_end_of_survey_box_open'].mean()
+for i in [10,25,50,75,90]:
+    dict_text_end_survey['length_answer_percentile_{}'.format(i)] = \
+        data_pilot['full']['nb_words_end_of_survey_box_open'].quantile(i/100)
+dict_text_end_survey['length_answer_max'] = data_pilot['full']['nb_words_end_of_survey_box_open'].max()
+
 
 # TODO: Do some stats over tags
 # TODO: Display most common words
