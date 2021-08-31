@@ -10,6 +10,9 @@ from __future__ import division
 
 import pandas as pd
 
+
+dict_latex_tables = {} # Gathers data used in Latex file
+
 ##### Read data from Qualtrics
 data_pilot = {}
 
@@ -151,7 +154,7 @@ for answer in [u'Tous les jours, pendant au moins une heure', u'Tous les jours, 
         float(len(data_pilot['full'][data_pilot['full']['social_networks_frequency']=='{}'.format(answer)])) / len(data_pilot['full'])
 del answer
 
-### Ideology
+### Science and climate change
 dict_survey_statistics['cc_science'] = {}
 
 dict_survey_statistics['cc_science']['cc_cause'] = {}
@@ -326,6 +329,14 @@ for respondent in items_respondents_meat:
 
 del desirable, item, respondent
 
+dict_latex_tables['meat'] = {}
+dict_latex_tables['meat']['joint_respondent_desirable'] = dict_meat['joint_respondent_desirable'].to_latex(
+    caption='Opinions about desirable meat consumption (raws) by own meat consumption (columns)',
+    float_format="{:.0%}".format,
+    column_format='p{3.0cm}|p{1.8cm}p{1.8cm}p{1.8cm}p{1.8cm}p{1.8cm}p{1.8cm}p{1.8cm}',
+    )
+
+
 ### Opinions on arguments in matrices
 for element in ['respondent', 'desirable']:
     if element == 'respondent':
@@ -350,7 +361,6 @@ for element in ['respondent', 'desirable']:
         dict_meat['score_arguments_{}_frequency'.format(element)]['respondent_{}'.format(topic)] = dict_meat['score_arguments_{}_frequency'.format(element)]['respondent_all'].loc[arguments_topic]
 
 del argument, arguments_topic, element, item, items_desirable_meat, items_respondents_meat, items_responses, matrix, topic
-#print(dict_meat['joint_respondent_desirable'].to_latex(caption='Matrix of opinions on meat consumption'))
 
 
 ##### Air travel
@@ -380,6 +390,12 @@ for respondent in items_respondents_airtravel:
 
 del desirable, item, respondent
 
+dict_latex_tables['airtravel'] = {}
+dict_latex_tables['airtravel']['joint_carbon_quintile_desirable'] = dict_airtravel['joint_respondent_desirable'].to_latex(
+    caption='Opinions about desirable air travel frequency (raws) by own air travel frequency (columns)',
+    float_format="{:.0%}".format,
+    column_format='p{5.0cm}|p{2.0cm}p{2.0cm}p{2.0cm}p{2.0cm}p{2.0cm}',
+    )
 
 ### Opinions on arguments in matrices
 for element in ['respondent', 'desirable']:
@@ -405,7 +421,6 @@ for element in ['respondent', 'desirable']:
         dict_airtravel['score_arguments_{}_frequency'.format(element)]['respondent_{}'.format(topic)] = dict_airtravel['score_arguments_{}_frequency'.format(element)]['respondent_all'].loc[arguments_topic]
 
 del argument, arguments_topic, element, item, items_desirable_airtravel, items_respondents_airtravel, items_responses, matrix, topic
-#print(df_transition_matrix_airtravel_frequency.to_latex(caption='Matrix of opinions on air travel consumption'))
 
 
 ##### Vehicles
@@ -443,8 +458,6 @@ for respondent in items_number_vehicles:
         dict_vehicle['joint_nb_vehicles_desirable'][respondent][desirable] = \
             float(len(data_pilot['vehicle'][data_pilot['vehicle'].nb_vehicles == respondent][data_pilot['vehicle'].vehicle_desirable_future == desirable])) / len(data_pilot['vehicle'][data_pilot['vehicle'].nb_vehicles == respondent])
 
-#print(df_transition_matrix_vehicle_number.to_latex(caption='Matrix of opinions on the future of thermal vehicles depending on vehicle ownership'))
-
 dict_vehicle['joint_electric_hybrid_desirable'] = pd.DataFrame(index=items_desirable_vehicle, columns=[0,1], dtype=float)
 for respondent in [0,1]:
     for desirable in items_desirable_vehicle:
@@ -452,6 +465,18 @@ for respondent in [0,1]:
             float(len(data_pilot['vehicle'][data_pilot['vehicle'].electric_or_hybrid_dummy == respondent][data_pilot['vehicle'].vehicle_desirable_future == desirable])) / len(data_pilot['vehicle'][data_pilot['vehicle'].electric_or_hybrid_dummy == respondent])
 
 del desirable, item, respondent
+
+dict_latex_tables['vehicle'] = {}
+dict_latex_tables['vehicle']['joint_carbon_quintile_desirable'] = dict_vehicle['joint_carbon_quintile_desirable'].to_latex(
+    caption='Opinions about the future of thermal vehicles (raws) by CO2 quintile (columns)',
+    float_format="{:.0%}".format,
+    column_format='p{5.0cm}|p{2.0cm}p{2.0cm}p{2.0cm}p{2.0cm}p{2.0cm}',
+    )
+dict_latex_tables['vehicle']['joint_nb_vehicles_desirable'] = dict_vehicle['joint_nb_vehicles_desirable'].to_latex(
+    caption='Opinions about the future of thermal vehicles (raws) by vehicle ownership (columns)',
+    float_format="{:.0%}".format,
+    column_format='p{9.0cm}|p{2.0cm}p{2.0cm}p{2.0cm}',
+    )
 
 ### Opinions on arguments in matrices
 
@@ -511,6 +536,13 @@ for respondent in items_respondents_vaccine:
 
 del desirable, item, respondent
 
+dict_latex_tables['vaccine'] = {}
+dict_latex_tables['vaccine']['joint_respondent_desirable'] = dict_vaccine['joint_respondent_desirable'].to_latex(
+    caption='Opinions about mandatory covid vaccination (raws) by own vaccination status (columns)',
+    float_format="{:.0%}".format,
+    column_format='p{3.0cm}|p{1.8cm}p{1.8cm}p{1.8cm}p{1.8cm}p{1.8cm}p{1.8cm}p{1.8cm}',
+    )
+
 ### Opinions on arguments in matrices
 for element in ['respondent', 'desirable']:
     if element == 'respondent':
@@ -535,8 +567,5 @@ for element in ['respondent', 'desirable']:
         dict_vaccine['score_arguments_{}'.format(element)]['respondent_{}'.format(topic)] = dict_vaccine['score_arguments_{}'.format(element)]['respondent_all'].loc[arguments_topic]
 
 del argument, arguments_topic, element, item, items_desirable_vaccine, items_respondents_vaccine, items_responses, matrix, topic
-#print(df_transition_matrix_vaccine.to_latex(caption='Matrix of opinions on covid vaccine'))
 
-# TODO: updater codes latex
-# TODO: study open answers -> export in another file where text can be read easily
-# TODO: check if there is a way to create sections in the script
+# TODO: ch0eck if there is a way to create sections in the script
