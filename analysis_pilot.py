@@ -305,6 +305,7 @@ for item in ['pros', 'cons']:
 
 del item, nb_topic, topic, var
 
+dict_topics = {}
 ##### Meat
 items_respondents_meat = [u'Jamais', u'Très occasionnellement', u'1 à 2 repas par semaine',
              u'3 à 5 repas par semaine', u'Environ un repas par jour', u'Presque à chaque repas']
@@ -312,22 +313,22 @@ items_desirable_meat = [u'jamais', u'très occasionnellement', u'1 à 2 repas pa
              u'3 à 5 repas par semaine', u'environ un repas par jour',
              u'presque à chaque repas', u'NSP (Ne sait pas, ne se prononce pas).']
 
-dict_meat = {}
+dict_topics['meat'] = {}
 
 ### Opinions on meat
-dict_meat['frequency_respondents'] = pd.DataFrame(index=items_respondents_meat, columns=['result'])
+dict_topics['meat']['meat_frequency_respondent'] = pd.DataFrame(index=items_respondents_meat, columns=['result'])
 for item in items_respondents_meat:
-    dict_meat['frequency_respondents']['result'][item] = float(len(data_pilot['meat'][data_pilot['meat'].meat_frequency_respondent == item])) / len(data_pilot['meat'])
+    dict_topics['meat']['meat_frequency_respondent']['result'][item] = float(len(data_pilot['meat'][data_pilot['meat'].meat_frequency_respondent == item])) / len(data_pilot['meat'])
     
 
-dict_meat['frequency_desirable'] = pd.DataFrame(index=items_desirable_meat, columns=['result'])
+dict_topics['meat']['meat_frequency_desirable'] = pd.DataFrame(index=items_desirable_meat, columns=['result'])
 for item in items_desirable_meat:
-    dict_meat['frequency_desirable']['result'][item] = float(len(data_pilot['meat'][data_pilot['meat'].meat_frequency_desirable == item])) / len(data_pilot['meat'])
+    dict_topics['meat']['meat_frequency_desirable']['result'][item] = float(len(data_pilot['meat'][data_pilot['meat'].meat_frequency_desirable == item])) / len(data_pilot['meat'])
 
-dict_meat['joint_respondent_desirable'] = pd.DataFrame(index=items_desirable_meat, columns=items_respondents_meat, dtype=float)
+dict_topics['meat']['joint_own_desirable'] = pd.DataFrame(index=items_desirable_meat, columns=items_respondents_meat, dtype=float)
 for respondent in items_respondents_meat:
     for desirable in items_desirable_meat:
-        dict_meat['joint_respondent_desirable'][respondent][desirable] = \
+        dict_topics['meat']['joint_own_desirable'][respondent][desirable] = \
             float(len(data_pilot['meat'][data_pilot['meat'].meat_frequency_respondent == respondent][data_pilot['meat'].meat_frequency_desirable == desirable])) / len(data_pilot['meat'][data_pilot['meat'].meat_frequency_respondent == respondent])
 
 del desirable, item, respondent
@@ -338,14 +339,14 @@ for element in ['respondent', 'desirable']:
         items_responses = items_respondents_meat
     else:
         items_responses = items_desirable_meat
-    dict_meat['score_arguments_{}_frequency'.format(element)] = {}
+    dict_topics['meat']['score_arguments_{}_frequency'.format(element)] = {}
     arguments = arguments_pros+arguments_cons
     for matrix in ['respondent', 'french']:
-        dict_meat['score_arguments_{}_frequency'.format(element)]['{}_all'.format(matrix)] = pd.DataFrame(index = arguments,
+        dict_topics['meat']['score_arguments_{}_frequency'.format(element)]['{}_all'.format(matrix)] = pd.DataFrame(index = arguments,
                                                                columns = items_responses, dtype=float)
         for argument in arguments:
             for item in items_responses:
-                dict_meat['score_arguments_{}_frequency'.format(element)]['{}_all'.format(matrix)][item][argument] = \
+                dict_topics['meat']['score_arguments_{}_frequency'.format(element)]['{}_all'.format(matrix)][item][argument] = \
                     data_pilot['matrix_{}'.format(matrix)][data_pilot['matrix_{}'.format(matrix)]['meat_frequency_{}'.format(element)] == item]['matrix_{}_'.format(matrix)+argument].mean()
     
     for topic in ['meat', 'airtravel', 'vehicle', 'vaccine']:
@@ -353,7 +354,7 @@ for element in ['respondent', 'desirable']:
         for argument in arguments:
             if '{}'.format(topic) in argument:
                 arguments_topic.append(argument)            
-        dict_meat['score_arguments_{}_frequency'.format(element)]['respondent_{}'.format(topic)] = dict_meat['score_arguments_{}_frequency'.format(element)]['respondent_all'].loc[arguments_topic]
+        dict_topics['meat']['score_arguments_{}_frequency'.format(element)]['respondent_{}'.format(topic)] = dict_topics['meat']['score_arguments_{}_frequency'.format(element)]['respondent_all'].loc[arguments_topic]
 
 del argument, arguments_topic, element, item, items_desirable_meat, items_respondents_meat, items_responses, matrix, topic
 
@@ -366,21 +367,21 @@ items_desirable_airtravel = [u'jamais', u'au moins une fois dans leur vie',
                    u'environ une fois par an', u'plusieurs fois par an',
                    'le plus souvent possible', u'NSP (Ne sait pas, ne se prononce pas).']
 
-dict_airtravel = {}
+dict_topics['airtravel'] = {}
 
 ### Opinions on air travel
-dict_airtravel['frequency_respondents'] = pd.DataFrame(index=items_respondents_airtravel, columns=['result'])
+dict_topics['airtravel']['airtravel_frequency_respondent'] = pd.DataFrame(index=items_respondents_airtravel, columns=['result'])
 for item in items_respondents_airtravel:
-    dict_airtravel['frequency_respondents']['result'][item] = float(len(data_pilot['airtravel'][data_pilot['airtravel'].airtravel_frequency_respondent == item])) / len(data_pilot['airtravel'])
+    dict_topics['airtravel']['airtravel_frequency_respondent']['result'][item] = float(len(data_pilot['airtravel'][data_pilot['airtravel'].airtravel_frequency_respondent == item])) / len(data_pilot['airtravel'])
 
-dict_airtravel['frequency_desirable'] = pd.DataFrame(index=items_desirable_airtravel, columns=['result'])
+dict_topics['airtravel']['airtravel_frequency_desirable'] = pd.DataFrame(index=items_desirable_airtravel, columns=['result'])
 for item in items_desirable_airtravel:
-    dict_airtravel['frequency_desirable']['result'][item] = float(len(data_pilot['airtravel'][data_pilot['airtravel'].airtravel_frequency_desirable == item])) / len(data_pilot['airtravel'])
+    dict_topics['airtravel']['airtravel_frequency_desirable']['result'][item] = float(len(data_pilot['airtravel'][data_pilot['airtravel'].airtravel_frequency_desirable == item])) / len(data_pilot['airtravel'])
 
-dict_airtravel['joint_respondent_desirable'] = pd.DataFrame(index=items_desirable_airtravel, columns=items_respondents_airtravel, dtype=float)
+dict_topics['airtravel']['joint_own_desirable'] = pd.DataFrame(index=items_desirable_airtravel, columns=items_respondents_airtravel, dtype=float)
 for respondent in items_respondents_airtravel:
     for desirable in items_desirable_airtravel:
-        dict_airtravel['joint_respondent_desirable'][respondent][desirable] = \
+        dict_topics['airtravel']['joint_own_desirable'][respondent][desirable] = \
             float(len(data_pilot['airtravel'][data_pilot['airtravel'].airtravel_frequency_respondent == respondent][data_pilot['airtravel'].airtravel_frequency_desirable == desirable])) / len(data_pilot['airtravel'][data_pilot['airtravel'].airtravel_frequency_respondent == respondent])
 
 del desirable, item, respondent
@@ -391,14 +392,14 @@ for element in ['respondent', 'desirable']:
         items_responses = items_respondents_airtravel
     else:
         items_responses = items_desirable_airtravel
-    dict_airtravel['score_arguments_{}_frequency'.format(element)] = {}
+    dict_topics['airtravel']['score_arguments_{}_frequency'.format(element)] = {}
     arguments = arguments_pros+arguments_cons
     for matrix in ['respondent', 'french']:
-        dict_airtravel['score_arguments_{}_frequency'.format(element)]['{}_all'.format(matrix)] = pd.DataFrame(index = arguments,
+        dict_topics['airtravel']['score_arguments_{}_frequency'.format(element)]['{}_all'.format(matrix)] = pd.DataFrame(index = arguments,
                                                                columns = items_responses, dtype=float)
         for argument in arguments:
             for item in items_responses:
-                dict_airtravel['score_arguments_{}_frequency'.format(element)]['{}_all'.format(matrix)][item][argument] = \
+                dict_topics['airtravel']['score_arguments_{}_frequency'.format(element)]['{}_all'.format(matrix)][item][argument] = \
                     data_pilot['matrix_{}'.format(matrix)][data_pilot['matrix_{}'.format(matrix)]['airtravel_frequency_{}'.format(element)] == item]['matrix_{}_'.format(matrix)+argument].mean()
     
     for topic in ['meat', 'airtravel', 'vehicle', 'vaccine']:
@@ -406,13 +407,13 @@ for element in ['respondent', 'desirable']:
         for argument in arguments:
             if '{}'.format(topic) in argument:
                 arguments_topic.append(argument)            
-        dict_airtravel['score_arguments_{}_frequency'.format(element)]['respondent_{}'.format(topic)] = dict_airtravel['score_arguments_{}_frequency'.format(element)]['respondent_all'].loc[arguments_topic]
+        dict_topics['airtravel']['score_arguments_{}_frequency'.format(element)]['respondent_{}'.format(topic)] = dict_topics['airtravel']['score_arguments_{}_frequency'.format(element)]['respondent_all'].loc[arguments_topic]
 
 del argument, arguments_topic, element, item, items_desirable_airtravel, items_respondents_airtravel, items_responses, matrix, topic
 
 
 ##### Vehicles
-dict_vehicle = {}
+dict_topics['vehicle'] = {}
 
 items_number_vehicles = [u'Aucun', u'Un', u'Deux ou plus']
 items_desirable_vehicle = [u'de cesser de les utiliser très rapidement (d\'ici 2030 ou avant)', u'de cesser de les utiliser progressivement (d\'ici 2040 ou 2050)',
@@ -420,32 +421,32 @@ items_desirable_vehicle = [u'de cesser de les utiliser très rapidement (d\'ici 
                            u'de continuer à les utiliser aussi longtemps que le pétrole est disponible', u'NSP (Ne sait pas, ne se prononce pas).']
 
 ### Opinions on vehicles
-dict_vehicle['desirable_future'] = pd.DataFrame(index=items_desirable_vehicle, columns=['result'], dtype=float)
+dict_topics['vehicle']['vehicle_desirable_future'] = pd.DataFrame(index=items_desirable_vehicle, columns=['result'], dtype=float)
 for item in items_desirable_vehicle:
-    dict_vehicle['desirable_future']['result'][item] = float(len(data_pilot['vehicle'][data_pilot['vehicle'].vehicle_desirable_future == item])) / len(data_pilot['vehicle'])
+    dict_topics['vehicle']['vehicle_desirable_future']['result'][item] = float(len(data_pilot['vehicle'][data_pilot['vehicle'].vehicle_desirable_future == item])) / len(data_pilot['vehicle'])
 
-dict_vehicle['joint_carbon_quintile_desirable'] = pd.DataFrame(index=items_desirable_vehicle, columns=range(1,6), dtype=float)
+dict_topics['vehicle']['joint_carbon_quintile_desirable'] = pd.DataFrame(index=items_desirable_vehicle, columns=range(1,6), dtype=float)
 for respondent in range(1,6):
     for desirable in items_desirable_vehicle:
-        dict_vehicle['joint_carbon_quintile_desirable'][respondent][desirable] = \
+        dict_topics['vehicle']['joint_carbon_quintile_desirable'][respondent][desirable] = \
             float(len(data_pilot['vehicle'][data_pilot['vehicle'].co2_quintile == respondent][data_pilot['vehicle'].vehicle_desirable_future == desirable])) / len(data_pilot['vehicle'][data_pilot['vehicle'].co2_quintile == respondent])
 
-dict_vehicle['joint_km_quintile_desirable'] = pd.DataFrame(index=items_desirable_vehicle, columns=range(1,6), dtype=float)
+dict_topics['vehicle']['joint_km_quintile_desirable'] = pd.DataFrame(index=items_desirable_vehicle, columns=range(1,6), dtype=float)
 for respondent in range(1,6):
     for desirable in items_desirable_vehicle:
-        dict_vehicle['joint_km_quintile_desirable'][respondent][desirable] = \
+        dict_topics['vehicle']['joint_km_quintile_desirable'][respondent][desirable] = \
             float(len(data_pilot['vehicle'][data_pilot['vehicle'].km_quintile == respondent][data_pilot['vehicle'].vehicle_desirable_future == desirable])) / len(data_pilot['vehicle'][data_pilot['vehicle'].km_quintile == respondent])
 
-dict_vehicle['joint_nb_vehicles_desirable'] = pd.DataFrame(index=items_desirable_vehicle, columns=items_number_vehicles, dtype=float)
+dict_topics['vehicle']['joint_nb_vehicles_desirable'] = pd.DataFrame(index=items_desirable_vehicle, columns=items_number_vehicles, dtype=float)
 for respondent in items_number_vehicles:
     for desirable in items_desirable_vehicle:
-        dict_vehicle['joint_nb_vehicles_desirable'][respondent][desirable] = \
+        dict_topics['vehicle']['joint_nb_vehicles_desirable'][respondent][desirable] = \
             float(len(data_pilot['vehicle'][data_pilot['vehicle'].nb_vehicles == respondent][data_pilot['vehicle'].vehicle_desirable_future == desirable])) / len(data_pilot['vehicle'][data_pilot['vehicle'].nb_vehicles == respondent])
 
-dict_vehicle['joint_electric_hybrid_desirable'] = pd.DataFrame(index=items_desirable_vehicle, columns=[0,1], dtype=float)
+dict_topics['vehicle']['joint_electric_hybrid_desirable'] = pd.DataFrame(index=items_desirable_vehicle, columns=[0,1], dtype=float)
 for respondent in [0,1]:
     for desirable in items_desirable_vehicle:
-        dict_vehicle['joint_electric_hybrid_desirable'][respondent][desirable] = \
+        dict_topics['vehicle']['joint_electric_hybrid_desirable'][respondent][desirable] = \
             float(len(data_pilot['vehicle'][data_pilot['vehicle'].electric_or_hybrid_dummy == respondent][data_pilot['vehicle'].vehicle_desirable_future == desirable])) / len(data_pilot['vehicle'][data_pilot['vehicle'].electric_or_hybrid_dummy == respondent])
 
 del desirable, item, respondent
@@ -459,14 +460,14 @@ for element in ['co2_quintile', 'nb_vehicles', 'vehicle_desirable_future']:
         items_responses = items_number_vehicles
     else:
         items_responses = items_desirable_vehicle
-    dict_vehicle['score_arguments_{}'.format(element)] = {}
+    dict_topics['vehicle']['score_arguments_{}'.format(element)] = {}
     arguments = arguments_pros+arguments_cons
     for matrix in ['respondent', 'french']:
-        dict_vehicle['score_arguments_{}'.format(element)]['{}_all'.format(matrix)] = pd.DataFrame(index = arguments,
+        dict_topics['vehicle']['score_arguments_{}'.format(element)]['{}_all'.format(matrix)] = pd.DataFrame(index = arguments,
                                                                columns = items_responses, dtype=float)
         for argument in arguments:
             for item in items_responses:
-                dict_vehicle['score_arguments_{}'.format(element)]['{}_all'.format(matrix)][item][argument] = \
+                dict_topics['vehicle']['score_arguments_{}'.format(element)]['{}_all'.format(matrix)][item][argument] = \
                     data_pilot['matrix_{}'.format(matrix)][data_pilot['matrix_{}'.format(matrix)]['{}'.format(element)] == item]['matrix_{}_'.format(matrix)+argument].mean()
     
     for topic in ['meat', 'airtravel', 'vehicle', 'vaccine']:
@@ -474,7 +475,7 @@ for element in ['co2_quintile', 'nb_vehicles', 'vehicle_desirable_future']:
         for argument in arguments:
             if '{}'.format(topic) in argument:
                 arguments_topic.append(argument)            
-        dict_vehicle['score_arguments_{}'.format(element)]['respondent_{}'.format(topic)] = dict_vehicle['score_arguments_{}'.format(element)]['respondent_all'].loc[arguments_topic]
+        dict_topics['vehicle']['score_arguments_{}'.format(element)]['respondent_{}'.format(topic)] = dict_topics['vehicle']['score_arguments_{}'.format(element)]['respondent_all'].loc[arguments_topic]
 
 del argument, arguments_topic, element, item, items_desirable_vehicle, items_number_vehicles, items_responses, matrix, topic
 
@@ -489,21 +490,21 @@ items_desirable_vaccine = [u'tous les Français se fassent vacciner à partir de
                           u'chacun décide de se faire vacciner en fonction de ses propres opinions et facteurs de risque',
                           u'NSP (Ne sait pas, ne se prononce pas).']
 
-dict_vaccine = {}
+dict_topics['vaccine'] = {}
 
 ### Opinions on vaccine
-dict_vaccine['respondents_status'] = pd.DataFrame(index=items_respondents_vaccine, columns=['result'])
+dict_topics['vaccine']['vaccine_respondent'] = pd.DataFrame(index=items_respondents_vaccine, columns=['result'])
 for item in items_respondents_vaccine:
-    dict_vaccine['respondents_status']['result'][item] = float(len(data_pilot['vaccine'][data_pilot['vaccine'].vaccine_respondent == item])) / len(data_pilot['vaccine'])
+    dict_topics['vaccine']['vaccine_respondent']['result'][item] = float(len(data_pilot['vaccine'][data_pilot['vaccine'].vaccine_respondent == item])) / len(data_pilot['vaccine'])
 
-dict_vaccine['desirable_policy'] = pd.DataFrame(index=items_desirable_vaccine, columns=['result'])
+dict_topics['vaccine']['vaccine_desirable'] = pd.DataFrame(index=items_desirable_vaccine, columns=['result'])
 for item in items_desirable_vaccine:
-    dict_vaccine['desirable_policy']['result'][item] = float(len(data_pilot['vaccine'][data_pilot['vaccine'].vaccine_desirable == item])) / len(data_pilot['vaccine'])
+    dict_topics['vaccine']['vaccine_desirable']['result'][item] = float(len(data_pilot['vaccine'][data_pilot['vaccine'].vaccine_desirable == item])) / len(data_pilot['vaccine'])
 
-dict_vaccine['joint_respondent_desirable'] = pd.DataFrame(index=items_desirable_vaccine, columns=items_respondents_vaccine, dtype=float)
+dict_topics['vaccine']['joint_own_desirable'] = pd.DataFrame(index=items_desirable_vaccine, columns=items_respondents_vaccine, dtype=float)
 for respondent in items_respondents_vaccine:
     for desirable in items_desirable_vaccine:
-        dict_vaccine['joint_respondent_desirable'][respondent][desirable] = \
+        dict_topics['vaccine']['joint_own_desirable'][respondent][desirable] = \
             float(len(data_pilot['vaccine'][data_pilot['vaccine'].vaccine_respondent == respondent][data_pilot['vaccine'].vaccine_desirable == desirable])) / len(data_pilot['vaccine'][data_pilot['vaccine'].vaccine_respondent == respondent])
 
 del desirable, item, respondent
@@ -514,14 +515,14 @@ for element in ['respondent', 'desirable']:
         items_responses = items_respondents_vaccine
     else:
         items_responses = items_desirable_vaccine
-    dict_vaccine['score_arguments_{}'.format(element)] = {}
+    dict_topics['vaccine']['score_arguments_{}'.format(element)] = {}
     arguments = arguments_pros+arguments_cons
     for matrix in ['respondent', 'french']:
-        dict_vaccine['score_arguments_{}'.format(element)]['{}_all'.format(matrix)] = pd.DataFrame(index = arguments,
+        dict_topics['vaccine']['score_arguments_{}'.format(element)]['{}_all'.format(matrix)] = pd.DataFrame(index = arguments,
                                                                columns = items_responses, dtype=float)
         for argument in arguments:
             for item in items_responses:
-                dict_vaccine['score_arguments_{}'.format(element)]['{}_all'.format(matrix)][item][argument] = \
+                dict_topics['vaccine']['score_arguments_{}'.format(element)]['{}_all'.format(matrix)][item][argument] = \
                     data_pilot['matrix_{}'.format(matrix)][data_pilot['matrix_{}'.format(matrix)]['vaccine_{}'.format(element)] == item]['matrix_{}_'.format(matrix)+argument].mean()
     
     for topic in ['meat', 'airtravel', 'vehicle', 'vaccine']:
@@ -529,15 +530,22 @@ for element in ['respondent', 'desirable']:
         for argument in arguments:
             if '{}'.format(topic) in argument:
                 arguments_topic.append(argument)            
-        dict_vaccine['score_arguments_{}'.format(element)]['respondent_{}'.format(topic)] = dict_vaccine['score_arguments_{}'.format(element)]['respondent_all'].loc[arguments_topic]
+        dict_topics['vaccine']['score_arguments_{}'.format(element)]['respondent_{}'.format(topic)] = dict_topics['vaccine']['score_arguments_{}'.format(element)]['respondent_all'].loc[arguments_topic]
 
 del argument, arguments_topic, element, item, items_desirable_vaccine, items_respondents_vaccine, items_responses, matrix, topic
 
 
-##### Generate Latex tables for descriptive statistics
+##### Generate Latex file with relevant tables for descriptive statistics
 dict_latex_tables = {}
 
 dict_variables = data_pilot['labels'].to_dict()
+
+latex_file = open(r"C:\Users\TDOUENN\Documents\Projects\Narratives\Data\latex_template.txt").read()
+
+### Sample characteristics
+latex_file = latex_file.replace('\end{document}',
+    '\\section{Respondents characteristics}' + '\n' + '\end{document}')
+
 
 for theme in ['socio_demographics', 'ideology', 'cc_science']:
     dict_latex_tables[theme] = {}
@@ -552,43 +560,87 @@ for theme in ['socio_demographics', 'ideology', 'cc_science']:
 
 dict_latex_tables['full_tables'] = {}
 for theme in ['socio_demographics', 'ideology', 'cc_science']:
+    if theme == 'socio_demographics':
+        section_title = '\subsection{Socio-demographic}'
+    elif theme == 'ideology':
+        section_title = '\subsection{Ideology}'
+    elif theme == 'cc_science':
+        section_title = '\subsection{Science and Climate Change}'
+
     dict_latex_tables['full_tables'][theme] = ''
     for question in dict_survey_statistics[theme]:
         dict_latex_tables['full_tables'][theme] = (
-            dict_latex_tables['full_tables'][theme] + dict_latex_tables[theme][question]
+            dict_latex_tables['full_tables'][theme] + '\n' + dict_latex_tables[theme][question]
             )
-                               
-dict_latex_tables['meat'] = {}
-dict_latex_tables['meat']['joint_respondent_desirable'] = dict_meat['joint_respondent_desirable'].to_latex(
+    latex_file = latex_file.replace("\end{document}",
+        '\\clearpage' + '\n' + '{}'.format(section_title) + '\n' + dict_latex_tables['full_tables'][theme] + '\n' + "\end{document}" )
+
+latex_file = latex_file.replace('\end{document}',
+    '\n' + '\\section{Attitudes and views on four topics}' + '\n' + '\end{document}')
+
+### Respondents attitude and views on topics
+for topic in ['meat', 'airtravel', 'vehicle', 'vaccine']:
+    dict_latex_tables[topic] = {}
+    dict_latex_tables['full_tables'][topic] = ''
+    if topic == 'meat':
+        questions = ['meat_frequency_respondent', 'meat_frequency_desirable']
+        section_title = '\subsection{Meat}'
+    elif topic == 'airtravel':
+        questions = ['airtravel_frequency_respondent', 'airtravel_frequency_desirable']
+        section_title = '\subsection{Air travel}'
+    elif topic == 'vehicle':
+        questions = ['vehicle_desirable_future']
+        section_title = '\subsection{Vehicle}'
+    elif topic == 'vaccine':
+        questions = ['vaccine_respondent', 'vaccine_desirable']
+        section_title = '\subsection{Vaccine}'
+
+    for question in questions:        
+        title = dict_variables['Question_survey'][question]
+        dict_latex_tables[topic][question] = dict_topics[topic][question].to_latex(
+            caption='\"{}\"'.format(title),
+            float_format="{:.0%}".format,
+            )
+        dict_latex_tables['full_tables'][topic] = (
+            dict_latex_tables['full_tables'][topic] + '\n' + dict_latex_tables[topic][question]
+            )
+    latex_file = latex_file.replace("\end{document}",
+        '\\clearpage' + '\n' + '{}'.format(section_title) + '\n' + dict_latex_tables['full_tables'][topic] + '\n' + "\end{document}" )
+        
+latex_file = latex_file.replace("begin{table}", "begin{table}[h!]")
+
+
+
+#Chantier ->
+
+### Respondents own attitude and beliefs about desirable outcome on each topic
+dict_latex_tables['meat']['joint_own_desirable'] = dict_topics['meat']['joint_own_desirable'].to_latex(
     caption='Opinions about desirable meat consumption (raws) by own meat consumption (columns)',
     float_format="{:.0%}".format,
     column_format='p{3.0cm}|p{1.8cm}p{1.8cm}p{1.8cm}p{1.8cm}p{1.8cm}p{1.8cm}p{1.8cm}',
     )
 
-dict_latex_tables['airtravel'] = {}
-dict_latex_tables['airtravel']['joint_carbon_quintile_desirable'] = dict_airtravel['joint_respondent_desirable'].to_latex(
+dict_latex_tables['airtravel']['joint_own_desirable'] = dict_topics['airtravel']['joint_own_desirable'].to_latex(
     caption='Opinions about desirable air travel frequency (raws) by own air travel frequency (columns)',
     float_format="{:.0%}".format,
     column_format='p{5.0cm}|p{2.0cm}p{2.0cm}p{2.0cm}p{2.0cm}p{2.0cm}',
     )
 
-dict_latex_tables['vehicle'] = {}
-dict_latex_tables['vehicle']['joint_carbon_quintile_desirable'] = dict_vehicle['joint_carbon_quintile_desirable'].to_latex(
+dict_latex_tables['vehicle']['joint_carbon_quintile_desirable'] = dict_topics['vehicle']['joint_carbon_quintile_desirable'].to_latex(
     caption='Opinions about the future of thermal vehicles (raws) by CO2 quintile (columns)',
     float_format="{:.0%}".format,
     column_format='p{5.0cm}|p{2.0cm}p{2.0cm}p{2.0cm}p{2.0cm}p{2.0cm}',
     )
-dict_latex_tables['vehicle']['joint_nb_vehicles_desirable'] = dict_vehicle['joint_nb_vehicles_desirable'].to_latex(
+dict_latex_tables['vehicle']['joint_nb_vehicles_desirable'] = dict_topics['vehicle']['joint_nb_vehicles_desirable'].to_latex(
     caption='Opinions about the future of thermal vehicles (raws) by vehicle ownership (columns)',
     float_format="{:.0%}".format,
     column_format='p{9.0cm}|p{2.0cm}p{2.0cm}p{2.0cm}',
     )
 
-dict_latex_tables['vaccine'] = {}
-dict_latex_tables['vaccine']['joint_respondent_desirable'] = dict_vaccine['joint_respondent_desirable'].to_latex(
+dict_latex_tables['vaccine']['joint_own_desirable'] = dict_topics['vaccine']['joint_own_desirable'].to_latex(
     caption='Opinions about mandatory covid vaccination (raws) by own vaccination status (columns)',
     float_format="{:.0%}".format,
     column_format='p{3.0cm}|p{1.8cm}p{1.8cm}p{1.8cm}p{1.8cm}p{1.8cm}p{1.8cm}p{1.8cm}',
     )
-
+    
 # TODO: check if there is a way to create sections in the script
