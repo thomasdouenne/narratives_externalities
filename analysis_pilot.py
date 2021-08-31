@@ -11,8 +11,6 @@ from __future__ import division
 import pandas as pd
 
 
-dict_latex_tables = {} # Gathers data used in Latex file
-
 ##### Read data from Qualtrics
 data_pilot = {}
 
@@ -25,6 +23,9 @@ data_pilot['vehicle'] = data_pilot['full'].query('topic_vehicle == 1').copy()
 data_pilot['vaccine'] = data_pilot['full'].query('topic_vaccine == 1').copy()
 data_pilot['matrix_respondent'] = data_pilot['full'].query('matrix_respondent == 1').copy()
 data_pilot['matrix_french'] = data_pilot['full'].query('matrix_french == 1').copy()
+
+data_pilot['labels'] = \
+    pd.read_csv(r'C:\Users\TDOUENN\Documents\Projects\Narratives\Data\data_qualtrics_pilot_narratives_labels.csv', sep=',', index_col=0)
 
 
 ##### Survey key statictics
@@ -72,8 +73,8 @@ del sub_samples_variables, var
 dict_survey_statistics['socio_demographics'] = {}
 
 dict_survey_statistics['socio_demographics']['sexe'] = {}
-dict_survey_statistics['socio_demographics']['sexe']['woman'] = float(len(data_pilot['full'][data_pilot['full']['sexe']=='Féminin'])) / len(data_pilot['full'])
-dict_survey_statistics['socio_demographics']['sexe']['man'] = float(len(data_pilot['full'][data_pilot['full']['sexe']=='Masculin'])) / len(data_pilot['full'])
+dict_survey_statistics['socio_demographics']['sexe']['Féminin'] = float(len(data_pilot['full'][data_pilot['full']['sexe']=='Féminin'])) / len(data_pilot['full'])
+dict_survey_statistics['socio_demographics']['sexe']['Masculin'] = float(len(data_pilot['full'][data_pilot['full']['sexe']=='Masculin'])) / len(data_pilot['full'])
 
 dict_survey_statistics['socio_demographics']['age_group'] = {}
 for age in [u'18 à 24 ans', u'25 à 34 ans', u'35 à 49 ans', u'50 à 64 ans', u'65 ans ou plus']:
@@ -115,10 +116,12 @@ del percentile, var
 dict_survey_statistics['ideology'] = {}
 
 dict_survey_statistics['ideology']['trust_others'] = {}
-dict_survey_statistics['ideology']['trust_others']['generally_yes'] = \
+dict_survey_statistics['ideology']['trust_others'][u'on peut faire confiance à la plupart des gens'] = \
     float(len(data_pilot['full'][data_pilot['full']['trust_others']==u'on peut faire confiance à la plupart des gens'])) / len(data_pilot['full'])
-dict_survey_statistics['ideology']['trust_others']['generally_no'] = \
+dict_survey_statistics['ideology']['trust_others'][u'on n’est jamais assez prudent quand on a affaire aux autres.'] = \
     float(len(data_pilot['full'][data_pilot['full']['trust_others']==u'on n’est jamais assez prudent quand on a affaire aux autres.'])) / len(data_pilot['full'])
+
+
 
 dict_survey_statistics['ideology']['trust_government'] = {}
 for answer in [u'Toujours', u'La plupart du temps', u'La moitié du temps', u'Parfois', u'Jamais', u'NSP (Ne sait pas, ne se prononce pas)']:
@@ -329,14 +332,6 @@ for respondent in items_respondents_meat:
 
 del desirable, item, respondent
 
-dict_latex_tables['meat'] = {}
-dict_latex_tables['meat']['joint_respondent_desirable'] = dict_meat['joint_respondent_desirable'].to_latex(
-    caption='Opinions about desirable meat consumption (raws) by own meat consumption (columns)',
-    float_format="{:.0%}".format,
-    column_format='p{3.0cm}|p{1.8cm}p{1.8cm}p{1.8cm}p{1.8cm}p{1.8cm}p{1.8cm}p{1.8cm}',
-    )
-
-
 ### Opinions on arguments in matrices
 for element in ['respondent', 'desirable']:
     if element == 'respondent':
@@ -390,13 +385,6 @@ for respondent in items_respondents_airtravel:
 
 del desirable, item, respondent
 
-dict_latex_tables['airtravel'] = {}
-dict_latex_tables['airtravel']['joint_carbon_quintile_desirable'] = dict_airtravel['joint_respondent_desirable'].to_latex(
-    caption='Opinions about desirable air travel frequency (raws) by own air travel frequency (columns)',
-    float_format="{:.0%}".format,
-    column_format='p{5.0cm}|p{2.0cm}p{2.0cm}p{2.0cm}p{2.0cm}p{2.0cm}',
-    )
-
 ### Opinions on arguments in matrices
 for element in ['respondent', 'desirable']:
     if element == 'respondent':
@@ -442,15 +430,11 @@ for respondent in range(1,6):
         dict_vehicle['joint_carbon_quintile_desirable'][respondent][desirable] = \
             float(len(data_pilot['vehicle'][data_pilot['vehicle'].co2_quintile == respondent][data_pilot['vehicle'].vehicle_desirable_future == desirable])) / len(data_pilot['vehicle'][data_pilot['vehicle'].co2_quintile == respondent])
 
-#print(df_transition_matrix_vehicle_carbon.to_latex(caption='Matrix of opinions on the future of thermal vehicles depending on carbon footprint quintile'))
-
 dict_vehicle['joint_km_quintile_desirable'] = pd.DataFrame(index=items_desirable_vehicle, columns=range(1,6), dtype=float)
 for respondent in range(1,6):
     for desirable in items_desirable_vehicle:
         dict_vehicle['joint_km_quintile_desirable'][respondent][desirable] = \
             float(len(data_pilot['vehicle'][data_pilot['vehicle'].km_quintile == respondent][data_pilot['vehicle'].vehicle_desirable_future == desirable])) / len(data_pilot['vehicle'][data_pilot['vehicle'].km_quintile == respondent])
-
-#print(df_transition_matrix_vehicle_km.to_latex(caption='Matrix of opinions on the future of thermal vehicles depending on number of km travelled quintile'))
 
 dict_vehicle['joint_nb_vehicles_desirable'] = pd.DataFrame(index=items_desirable_vehicle, columns=items_number_vehicles, dtype=float)
 for respondent in items_number_vehicles:
@@ -465,18 +449,6 @@ for respondent in [0,1]:
             float(len(data_pilot['vehicle'][data_pilot['vehicle'].electric_or_hybrid_dummy == respondent][data_pilot['vehicle'].vehicle_desirable_future == desirable])) / len(data_pilot['vehicle'][data_pilot['vehicle'].electric_or_hybrid_dummy == respondent])
 
 del desirable, item, respondent
-
-dict_latex_tables['vehicle'] = {}
-dict_latex_tables['vehicle']['joint_carbon_quintile_desirable'] = dict_vehicle['joint_carbon_quintile_desirable'].to_latex(
-    caption='Opinions about the future of thermal vehicles (raws) by CO2 quintile (columns)',
-    float_format="{:.0%}".format,
-    column_format='p{5.0cm}|p{2.0cm}p{2.0cm}p{2.0cm}p{2.0cm}p{2.0cm}',
-    )
-dict_latex_tables['vehicle']['joint_nb_vehicles_desirable'] = dict_vehicle['joint_nb_vehicles_desirable'].to_latex(
-    caption='Opinions about the future of thermal vehicles (raws) by vehicle ownership (columns)',
-    float_format="{:.0%}".format,
-    column_format='p{9.0cm}|p{2.0cm}p{2.0cm}p{2.0cm}',
-    )
 
 ### Opinions on arguments in matrices
 
@@ -536,13 +508,6 @@ for respondent in items_respondents_vaccine:
 
 del desirable, item, respondent
 
-dict_latex_tables['vaccine'] = {}
-dict_latex_tables['vaccine']['joint_respondent_desirable'] = dict_vaccine['joint_respondent_desirable'].to_latex(
-    caption='Opinions about mandatory covid vaccination (raws) by own vaccination status (columns)',
-    float_format="{:.0%}".format,
-    column_format='p{3.0cm}|p{1.8cm}p{1.8cm}p{1.8cm}p{1.8cm}p{1.8cm}p{1.8cm}p{1.8cm}',
-    )
-
 ### Opinions on arguments in matrices
 for element in ['respondent', 'desirable']:
     if element == 'respondent':
@@ -568,4 +533,62 @@ for element in ['respondent', 'desirable']:
 
 del argument, arguments_topic, element, item, items_desirable_vaccine, items_respondents_vaccine, items_responses, matrix, topic
 
-# TODO: ch0eck if there is a way to create sections in the script
+
+##### Generate Latex tables for descriptive statistics
+dict_latex_tables = {}
+
+dict_variables = data_pilot['labels'].to_dict()
+
+for theme in ['socio_demographics', 'ideology', 'cc_science']:
+    dict_latex_tables[theme] = {}
+    for question in dict_survey_statistics[theme]:
+        title = dict_variables['Question_survey'][question]
+        dict_latex_tables[theme][question] = \
+        pd.DataFrame.from_dict(dict_survey_statistics[theme][question], orient='index',
+                           columns=['Percentage']).to_latex(
+            caption='\"{}\"'.format(title),
+            float_format="{:.0%}".format,
+            )
+
+dict_latex_tables['full_tables'] = {}
+for theme in ['socio_demographics', 'ideology', 'cc_science']:
+    dict_latex_tables['full_tables'][theme] = ''
+    for question in dict_survey_statistics[theme]:
+        dict_latex_tables['full_tables'][theme] = (
+            dict_latex_tables['full_tables'][theme] + dict_latex_tables[theme][question]
+            )
+                               
+dict_latex_tables['meat'] = {}
+dict_latex_tables['meat']['joint_respondent_desirable'] = dict_meat['joint_respondent_desirable'].to_latex(
+    caption='Opinions about desirable meat consumption (raws) by own meat consumption (columns)',
+    float_format="{:.0%}".format,
+    column_format='p{3.0cm}|p{1.8cm}p{1.8cm}p{1.8cm}p{1.8cm}p{1.8cm}p{1.8cm}p{1.8cm}',
+    )
+
+dict_latex_tables['airtravel'] = {}
+dict_latex_tables['airtravel']['joint_carbon_quintile_desirable'] = dict_airtravel['joint_respondent_desirable'].to_latex(
+    caption='Opinions about desirable air travel frequency (raws) by own air travel frequency (columns)',
+    float_format="{:.0%}".format,
+    column_format='p{5.0cm}|p{2.0cm}p{2.0cm}p{2.0cm}p{2.0cm}p{2.0cm}',
+    )
+
+dict_latex_tables['vehicle'] = {}
+dict_latex_tables['vehicle']['joint_carbon_quintile_desirable'] = dict_vehicle['joint_carbon_quintile_desirable'].to_latex(
+    caption='Opinions about the future of thermal vehicles (raws) by CO2 quintile (columns)',
+    float_format="{:.0%}".format,
+    column_format='p{5.0cm}|p{2.0cm}p{2.0cm}p{2.0cm}p{2.0cm}p{2.0cm}',
+    )
+dict_latex_tables['vehicle']['joint_nb_vehicles_desirable'] = dict_vehicle['joint_nb_vehicles_desirable'].to_latex(
+    caption='Opinions about the future of thermal vehicles (raws) by vehicle ownership (columns)',
+    float_format="{:.0%}".format,
+    column_format='p{9.0cm}|p{2.0cm}p{2.0cm}p{2.0cm}',
+    )
+
+dict_latex_tables['vaccine'] = {}
+dict_latex_tables['vaccine']['joint_respondent_desirable'] = dict_vaccine['joint_respondent_desirable'].to_latex(
+    caption='Opinions about mandatory covid vaccination (raws) by own vaccination status (columns)',
+    float_format="{:.0%}".format,
+    column_format='p{3.0cm}|p{1.8cm}p{1.8cm}p{1.8cm}p{1.8cm}p{1.8cm}p{1.8cm}p{1.8cm}',
+    )
+
+# TODO: check if there is a way to create sections in the script

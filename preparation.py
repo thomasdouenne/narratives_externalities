@@ -127,6 +127,10 @@ data_qualtrics_renamed = data_qualtrics_raw.rename(
              }
           ).copy()
 
+df_variable_labels = data_qualtrics_renamed.head(2)
+df_variable_labels = df_variable_labels.T[0].rename('Question_survey')
+
+
 ##### Create handy variables
 data_qualtrics_renamed['topic_meat'] = 1*(data_qualtrics_renamed['meat_frequency_respondent'].isna() == False)
 data_qualtrics_renamed['topic_airtravel'] = 1*(data_qualtrics_renamed['airtravel_frequency_respondent'].isna() == False)
@@ -194,7 +198,6 @@ for var in matrix_french_variables:
 
 ##### Create final dataframe with complete answers
 df_complete_answers = data_qualtrics_renamed.query('survey_fully_completed == 1').copy()
-df_variable_labels = df_complete_answers.head(2)
 df_complete_answers = df_complete_answers.drop(df_complete_answers.index[[0,1]])
 
 # Compute CO2 emissions from respondents' vehicles
