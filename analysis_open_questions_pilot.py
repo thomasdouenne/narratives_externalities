@@ -532,33 +532,43 @@ dict_tags_vaccine['why_neutral'] = {
     }
 
 dict_tags_vaccine['poor_country_argument'] = {
-    'Agree': [],
-    'Not_true': [],
-    'It_depends': [],
-    'Uncertain': [],
+    'Agree': [30,45,48,56,281,314,451,966,1100,1271],
+    'Not_true': [21,38,61,176,177,221,230,264,265,328,399,440,482,611,687,
+                 690,716,771,793,814,817,953,1770,2223,3222,3245],
+    'It_depends': [155,162,210,276,314,384,434,455,559,665,882],
+    'Uncertain': [353],
+    'French_first': [21,38,155,176,203,230,298,328,336,365,373,399,440,487,
+                     690,771,953,1770,3222,3245],
+    'Yes_to_limit_variants': [48],
+    'Yes_to_protect_us': [30,48,276],
+    'Do_both': [55,73,82,115,131,145,164,173,189,190,245,253,267,272,290,
+                321,340,362,413,416,478,482,817,3240],
+    'They_need_it_less': [61,162,687],
+    'Their_dirigeants_responsibility': [336,455],
+    'Close_borders': [245,314,373],
     'Unrelated_opposite_argument': [],
-    'Dont_know': [],
-    'Unclear_undetermined': [],
+    'Dont_know': [37,515,901],
+    'Unclear_undetermined': [194,209,665,750],
     }
 
 dict_tags_vaccine['protecting_others_argument'] = {
-    'Agree': [],
-    'Not_true': [],
-    'It_depends': [],
-    'Uncertain': [],
-    'Unrelated_opposite_argument': [],
-    'Dont_know': [],
-    'Unclear_undetermined': [],
+    'Agree': [31,54,65,93,101,113,130,150,167,183,208,219,220,240,277,306,
+              333,376,382,391,445,472,635,645,707,775,832,899,987,1002,3227],
+    'Not_true': [9,15,92,106,109,121,132,151,172,213,238,263,284,320,323,363,
+                 370,393,405,411,441,492,539,609,852,904,3347],
+    'It_depends': [67,106,411,881],
+    'Uncertain': [15,93,109,151,213,284,320,533,547,1209],
+    'Not_for_variants': [93,323,987],
+    'Only_prevents_serious_cases': [405,539],
+    'Distrust': [121,213,238,320,393,534],
+    'Agressive_answer': [172],
+    'Unrelated_opposite_argument': [130,132,213,320,333,446,852],
+    'Dont_know': [122,726],
+    'Unclear_undetermined': [18,327,333,421,446,3257],
     }
 
 
-# TODO: FInish these tags
-
-
-
-
-
-##### Descriptive statistics lenght open-ended answers
+##### Descriptive statistics length open-ended answers
 
 ### Meat
 data_pilot['meat']['asked_why_against'] = (
