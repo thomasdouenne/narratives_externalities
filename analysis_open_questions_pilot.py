@@ -2,8 +2,10 @@
 
 
 """
-This script ...
+This script analyzes the answers to open-ended questions from the
+Qualtrics pilot survey on narratives and externalities
 """
+
 
 from __future__ import division
 
@@ -22,30 +24,32 @@ data_pilot['vehicle'] = data_pilot['full'].query('topic_vehicle == 1').copy()
 data_pilot['vaccine'] = data_pilot['full'].query('topic_vaccine == 1').copy()
 
 ##### End of survey box
-answers_open_end_box = data_pilot['full']['end_of_survey_box'].dropna()
-answers_open_end_box.to_csv(r'C:\Users\TDOUENN\Documents\Projects\Narratives\Data\Text_open_questions\open_end_box.csv',
+dict_full_answers = {}
+dict_full_answers['open_end_box'] = data_pilot['full']['end_of_survey_box'].dropna()
+dict_full_answers['open_end_box'].to_csv(r'C:\Users\TDOUENN\Documents\Projects\Narratives\Data\Text_open_questions\open_end_box.csv',
                             sep=';', encoding='utf-8-sig', index=True)
 
 dict_tags = {}
 ### Meat
-answers_meat_why_against_open = data_pilot['meat']['meat_why_against_open'].dropna()
-answers_meat_why_against_open.to_csv(r'C:\Users\TDOUENN\Documents\Projects\Narratives\Data\Text_open_questions\Meat\meat_why_against.csv',
+dict_full_answers['meat'] = {}
+dict_full_answers['meat']['why_against_open'] = data_pilot['meat']['meat_why_against_open'].dropna()
+dict_full_answers['meat']['why_against_open'].to_csv(r'C:\Users\TDOUENN\Documents\Projects\Narratives\Data\Text_open_questions\Meat\meat_why_against.csv',
                             sep=';', encoding='utf-8-sig', index=True)
 
-answers_meat_why_favorable_open = data_pilot['meat']['meat_why_favorable_open'].dropna()
-answers_meat_why_favorable_open.to_csv(r'C:\Users\TDOUENN\Documents\Projects\Narratives\Data\Text_open_questions\Meat\meat_why_favorable.csv',
+dict_full_answers['meat']['why_favorable_open'] = data_pilot['meat']['meat_why_favorable_open'].dropna()
+dict_full_answers['meat']['why_favorable_open'].to_csv(r'C:\Users\TDOUENN\Documents\Projects\Narratives\Data\Text_open_questions\Meat\meat_why_favorable.csv',
                             sep=';', encoding='utf-8-sig', index=True)
 
-answers_meat_why_neutral_open = data_pilot['meat']['meat_why_neutral_open'].dropna()
-answers_meat_why_neutral_open.to_csv(r'C:\Users\TDOUENN\Documents\Projects\Narratives\Data\Text_open_questions\Meat\meat_why_neutral.csv',
+dict_full_answers['meat']['why_neutral_open'] = data_pilot['meat']['meat_why_neutral_open'].dropna()
+dict_full_answers['meat']['why_neutral_open'].to_csv(r'C:\Users\TDOUENN\Documents\Projects\Narratives\Data\Text_open_questions\Meat\meat_why_neutral.csv',
                             sep=';', encoding='utf-8-sig', index=True)
 
-answers_meat_landscape_argument_open = data_pilot['meat']['meat_landscape_argument_open'].dropna()
-answers_meat_landscape_argument_open.to_csv(r'C:\Users\TDOUENN\Documents\Projects\Narratives\Data\Text_open_questions\Meat\meat_landscape_argument.csv',
+dict_full_answers['meat']['landscape_argument_open'] = data_pilot['meat']['meat_landscape_argument_open'].dropna()
+dict_full_answers['meat']['landscape_argument_open'].to_csv(r'C:\Users\TDOUENN\Documents\Projects\Narratives\Data\Text_open_questions\Meat\meat_landscape_argument.csv',
                             sep=';', encoding='utf-8-sig', index=True)
 
-answers_meat_carbon_footprint_argument_open = data_pilot['meat']['meat_carbon_footprint_argument_open'].dropna()
-answers_meat_carbon_footprint_argument_open.to_csv(r'C:\Users\TDOUENN\Documents\Projects\Narratives\Data\Text_open_questions\Meat\meat_carbon_footprint_argument.csv',
+dict_full_answers['meat']['carbon_footprint_argument_open'] = data_pilot['meat']['meat_carbon_footprint_argument_open'].dropna()
+dict_full_answers['meat']['carbon_footprint_argument_open'].to_csv(r'C:\Users\TDOUENN\Documents\Projects\Narratives\Data\Text_open_questions\Meat\meat_carbon_footprint_argument.csv',
                             sep=';', encoding='utf-8-sig', index=True)
 
 dict_tags['meat'] = {}
@@ -157,26 +161,29 @@ for element in dict_tags['meat']['carbon_footprint_argument'].keys():
     data_pilot['meat'].loc[dict_tags['meat']['carbon_footprint_argument'][element],'tags_answer_carbon_footprint_argument'] = \
         element + ';' + data_pilot['meat'].loc[dict_tags['meat']['carbon_footprint_argument'][element],'tags_answer_carbon_footprint_argument']
 
+del element
+
 
 ##### Air travel
-answers_airtravel_why_against_open = data_pilot['airtravel']['airtravel_why_against_open'].dropna()
-answers_airtravel_why_against_open.to_csv(r'C:\Users\TDOUENN\Documents\Projects\Narratives\Data\Text_open_questions\Airtravel\airtravel_why_against.csv',
+dict_full_answers['airtravel'] = {}
+dict_full_answers['airtravel']['why_against_open'] = data_pilot['airtravel']['airtravel_why_against_open'].dropna()
+dict_full_answers['airtravel']['why_against_open'].to_csv(r'C:\Users\TDOUENN\Documents\Projects\Narratives\Data\Text_open_questions\Airtravel\airtravel_why_against.csv',
                             sep=';', encoding='utf-8-sig', index=True)
 
-answers_airtravel_why_favorable_open = data_pilot['airtravel']['airtravel_why_favorable_open'].dropna()
-answers_airtravel_why_favorable_open.to_csv(r'C:\Users\TDOUENN\Documents\Projects\Narratives\Data\Text_open_questions\Airtravel\airtravel_why_favorable.csv',
+dict_full_answers['airtravel']['why_favorable_open'] = data_pilot['airtravel']['airtravel_why_favorable_open'].dropna()
+dict_full_answers['airtravel']['why_favorable_open'].to_csv(r'C:\Users\TDOUENN\Documents\Projects\Narratives\Data\Text_open_questions\Airtravel\airtravel_why_favorable.csv',
                             sep=';', encoding='utf-8-sig', index=True)
 
-answers_airtravel_why_neutral_open = data_pilot['airtravel']['airtravel_why_neutral_open'].dropna()
-answers_airtravel_why_neutral_open.to_csv(r'C:\Users\TDOUENN\Documents\Projects\Narratives\Data\Text_open_questions\Airtravel\airtravel_why_neutral.csv',
+dict_full_answers['airtravel']['why_neutral_open'] = data_pilot['airtravel']['airtravel_why_neutral_open'].dropna()
+dict_full_answers['airtravel']['why_neutral_open'].to_csv(r'C:\Users\TDOUENN\Documents\Projects\Narratives\Data\Text_open_questions\Airtravel\airtravel_why_neutral.csv',
                             sep=';', encoding='utf-8-sig', index=True)
 
-answers_airtravel_open_mindedness_argument_open = data_pilot['airtravel']['airtravel_open_mindedness_argument_open'].dropna()
-answers_airtravel_open_mindedness_argument_open.to_csv(r'C:\Users\TDOUENN\Documents\Projects\Narratives\Data\Text_open_questions\Airtravel\airtravel_open_mindedness_argument.csv',
+dict_full_answers['airtravel']['open_mindedness_argument_open'] = data_pilot['airtravel']['airtravel_open_mindedness_argument_open'].dropna()
+dict_full_answers['airtravel']['open_mindedness_argument_open'].to_csv(r'C:\Users\TDOUENN\Documents\Projects\Narratives\Data\Text_open_questions\Airtravel\airtravel_open_mindedness_argument.csv',
                             sep=';', encoding='utf-8-sig', index=True)
 
-answers_airtravel_carbon_footprint_argument_open = data_pilot['airtravel']['airtravel_carbon_footprint_argument_open'].dropna()
-answers_airtravel_carbon_footprint_argument_open.to_csv(r'C:\Users\TDOUENN\Documents\Projects\Narratives\Data\Text_open_questions\Airtravel\airtravel_carbon_argument.csv',
+dict_full_answers['airtravel']['carbon_footprint_argument_open'] = data_pilot['airtravel']['airtravel_carbon_footprint_argument_open'].dropna()
+dict_full_answers['airtravel']['carbon_footprint_argument_open'].to_csv(r'C:\Users\TDOUENN\Documents\Projects\Narratives\Data\Text_open_questions\Airtravel\airtravel_carbon_argument.csv',
                             sep=';', encoding='utf-8-sig', index=True)
 
 dict_tags['airtravel'] = {}
@@ -287,30 +294,33 @@ for element in dict_tags['airtravel']['carbon_footprint_argument'].keys():
     data_pilot['airtravel'].loc[dict_tags['airtravel']['carbon_footprint_argument'][element],'tags_answer_carbon_footprint_argument'] = \
         element + ';' + data_pilot['airtravel'].loc[dict_tags['airtravel']['carbon_footprint_argument'][element],'tags_answer_carbon_footprint_argument']
 
+del element
+
 
 ##### Vehicle
-answers_vehicle_why_against_open = data_pilot['vehicle']['vehicle_why_against_open'].dropna()
-answers_vehicle_why_against_open.to_csv(r'C:\Users\TDOUENN\Documents\Projects\Narratives\Data\Text_open_questions\Vehicle\vehicle_why_against.csv',
+dict_full_answers['vehicle'] = {}
+dict_full_answers['vehicle']['why_against_open'] = data_pilot['vehicle']['vehicle_why_against_open'].dropna()
+dict_full_answers['vehicle']['why_against_open'].to_csv(r'C:\Users\TDOUENN\Documents\Projects\Narratives\Data\Text_open_questions\Vehicle\vehicle_why_against.csv',
                             sep=';', encoding='utf-8-sig', index=True)
 
-answers_vehicle_why_favorable_open = data_pilot['vehicle']['vehicle_why_favorable_open'].dropna()
-answers_vehicle_why_favorable_open.to_csv(r'C:\Users\TDOUENN\Documents\Projects\Narratives\Data\Text_open_questions\Vehicle\vehicle_why_favorable.csv',
+dict_full_answers['vehicle']['why_favorable_open'] = data_pilot['vehicle']['vehicle_why_favorable_open'].dropna()
+dict_full_answers['vehicle']['why_favorable_open'].to_csv(r'C:\Users\TDOUENN\Documents\Projects\Narratives\Data\Text_open_questions\Vehicle\vehicle_why_favorable.csv',
                             sep=';', encoding='utf-8-sig', index=True)
 
-answers_vehicle_why_diesel_open = data_pilot['vehicle']['vehicle_why_diesel_open'].dropna()
-answers_vehicle_why_diesel_open.to_csv(r'C:\Users\TDOUENN\Documents\Projects\Narratives\Data\Text_open_questions\Vehicle\vehicle_why_diesel.csv',
+dict_full_answers['vehicle']['why_diesel_open'] = data_pilot['vehicle']['vehicle_why_diesel_open'].dropna()
+dict_full_answers['vehicle']['why_diesel_open'].to_csv(r'C:\Users\TDOUENN\Documents\Projects\Narratives\Data\Text_open_questions\Vehicle\vehicle_why_diesel.csv',
                             sep=';', encoding='utf-8-sig', index=True)
 
-answers_vehicle_why_neutral_open = data_pilot['vehicle']['vehicle_why_neutral_open'].dropna()
-answers_vehicle_why_neutral_open.to_csv(r'C:\Users\TDOUENN\Documents\Projects\Narratives\Data\Text_open_questions\Vehicle\vehicle_why_neutral.csv',
+dict_full_answers['vehicle']['why_neutral_open'] = data_pilot['vehicle']['vehicle_why_neutral_open'].dropna()
+dict_full_answers['vehicle']['why_neutral_open'].to_csv(r'C:\Users\TDOUENN\Documents\Projects\Narratives\Data\Text_open_questions\Vehicle\vehicle_why_neutral.csv',
                             sep=';', encoding='utf-8-sig', index=True)
 
-answers_vehicle_electric_pollutes_more_argument_open = data_pilot['vehicle']['vehicle_electric_pollutes_more_argument_open'].dropna()
-answers_vehicle_electric_pollutes_more_argument_open.to_csv(r'C:\Users\TDOUENN\Documents\Projects\Narratives\Data\Text_open_questions\Vehicle\vehicle_electric_pollutes_more_argument.csv',
+dict_full_answers['vehicle']['electric_pollutes_more_argument_open'] = data_pilot['vehicle']['vehicle_electric_pollutes_more_argument_open'].dropna()
+dict_full_answers['vehicle']['electric_pollutes_more_argument_open'].to_csv(r'C:\Users\TDOUENN\Documents\Projects\Narratives\Data\Text_open_questions\Vehicle\vehicle_electric_pollutes_more_argument.csv',
                             sep=';', encoding='utf-8-sig', index=True)
 
-answers_vehicle_thermal_pollutes_more_argument_open = data_pilot['vehicle']['vehicle_thermal_pollutes_more_argument_open'].dropna()
-answers_vehicle_thermal_pollutes_more_argument_open.to_csv(r'C:\Users\TDOUENN\Documents\Projects\Narratives\Data\Text_open_questions\Vehicle\vehicle_thermal_pollutes_more_argument.csv',
+dict_full_answers['vehicle']['thermal_pollutes_more_argument_open'] = data_pilot['vehicle']['vehicle_thermal_pollutes_more_argument_open'].dropna()
+dict_full_answers['vehicle']['thermal_pollutes_more_argument_open'].to_csv(r'C:\Users\TDOUENN\Documents\Projects\Narratives\Data\Text_open_questions\Vehicle\vehicle_thermal_pollutes_more_argument.csv',
                             sep=';', encoding='utf-8-sig', index=True)
 
 dict_tags['vehicle'] = {}
@@ -448,26 +458,28 @@ for element in dict_tags['vehicle']['thermal_pollutes_more_argument'].keys():
     data_pilot['vehicle'].loc[dict_tags['vehicle']['thermal_pollutes_more_argument'][element],'tags_answer_thermal_pollutes_more_argument'] = \
         element + ';' + data_pilot['vehicle'].loc[dict_tags['vehicle']['thermal_pollutes_more_argument'][element],'tags_answer_thermal_pollutes_more_argument']
 
+del element
 
 ##### Vaccine
-answers_vaccine_why_against_open = data_pilot['vaccine']['vaccine_why_against_open'].dropna()
-answers_vaccine_why_against_open.to_csv(r'C:\Users\TDOUENN\Documents\Projects\Narratives\Data\Text_open_questions\Vaccine\vaccine_why_against.csv',
+dict_full_answers['vaccine'] = {}
+dict_full_answers['vaccine']['why_against_open'] = data_pilot['vaccine']['vaccine_why_against_open'].dropna()
+dict_full_answers['vaccine']['why_against_open'].to_csv(r'C:\Users\TDOUENN\Documents\Projects\Narratives\Data\Text_open_questions\Vaccine\vaccine_why_against.csv',
                             sep=';', encoding='utf-8-sig', index=True)
 
-answers_vaccine_why_favorable_open = data_pilot['vaccine']['vaccine_why_favorable_open'].dropna()
-answers_vaccine_why_favorable_open.to_csv(r'C:\Users\TDOUENN\Documents\Projects\Narratives\Data\Text_open_questions\Vaccine\vaccine_why_favorable.csv',
+dict_full_answers['vaccine']['why_favorable_open'] = data_pilot['vaccine']['vaccine_why_favorable_open'].dropna()
+dict_full_answers['vaccine']['why_favorable_open'].to_csv(r'C:\Users\TDOUENN\Documents\Projects\Narratives\Data\Text_open_questions\Vaccine\vaccine_why_favorable.csv',
                             sep=';', encoding='utf-8-sig', index=True)
 
-answers_vaccine_why_neutral_open = data_pilot['vaccine']['vaccine_why_neutral_open'].dropna()
-answers_vaccine_why_neutral_open.to_csv(r'C:\Users\TDOUENN\Documents\Projects\Narratives\Data\Text_open_questions\Vaccine\vaccine_why_neutral.csv',
+dict_full_answers['vaccine']['why_neutral_open'] = data_pilot['vaccine']['vaccine_why_neutral_open'].dropna()
+dict_full_answers['vaccine']['why_neutral_open'].to_csv(r'C:\Users\TDOUENN\Documents\Projects\Narratives\Data\Text_open_questions\Vaccine\vaccine_why_neutral.csv',
                             sep=';', encoding='utf-8-sig', index=True)
 
-answers_vaccine_poor_country_argument_open = data_pilot['vaccine']['vaccine_poor_country_argument_open'].dropna()
-answers_vaccine_poor_country_argument_open.to_csv(r'C:\Users\TDOUENN\Documents\Projects\Narratives\Data\Text_open_questions\Vaccine\vaccine_poor_country_argument.csv',
+dict_full_answers['vaccine']['poor_country_argument_open'] = data_pilot['vaccine']['vaccine_poor_country_argument_open'].dropna()
+dict_full_answers['vaccine']['poor_country_argument_open'].to_csv(r'C:\Users\TDOUENN\Documents\Projects\Narratives\Data\Text_open_questions\Vaccine\vaccine_poor_country_argument.csv',
                             sep=';', encoding='utf-8-sig', index=True)
 
-answers_vaccine_protecting_others_argument_open = data_pilot['vaccine']['vaccine_protecting_others_argument_open'].dropna()
-answers_vaccine_protecting_others_argument_open.to_csv(r'C:\Users\TDOUENN\Documents\Projects\Narratives\Data\Text_open_questions\Vaccine\vaccine_protecting_others_argument.csv',
+dict_full_answers['vaccine']['protecting_others_argument_open'] = data_pilot['vaccine']['vaccine_protecting_others_argument_open'].dropna()
+dict_full_answers['vaccine']['protecting_others_argument_open'].to_csv(r'C:\Users\TDOUENN\Documents\Projects\Narratives\Data\Text_open_questions\Vaccine\vaccine_protecting_others_argument.csv',
                             sep=';', encoding='utf-8-sig', index=True)
 
 dict_tags['vaccine'] = {}
@@ -593,6 +605,7 @@ for element in dict_tags['vaccine']['protecting_others_argument'].keys():
     data_pilot['vaccine'].loc[dict_tags['vaccine']['protecting_others_argument'][element],'tags_answer_protecting_others_argument'] = \
         element + ';' + data_pilot['vaccine'].loc[dict_tags['vaccine']['protecting_others_argument'][element],'tags_answer_protecting_others_argument']
 
+del element
 
 ##### Descriptive statistics length open-ended answers
 dict_text = {}
@@ -627,6 +640,7 @@ for question in ['why_against', 'why_neutral', 'why_favorable', 'landscape_argum
             data_pilot['meat']['nb_words_meat_{}_open'.format(question)].quantile(i/100)
     dict_text['meat'][question]['length_answer_max'] = data_pilot['meat']['nb_words_meat_{}_open'.format(question)].max()
 
+del question, i
 
 ### Airtravel
 data_pilot['airtravel']['asked_why_against'] = (
@@ -657,6 +671,7 @@ for question in ['why_against', 'why_neutral', 'why_favorable', 'open_mindedness
             data_pilot['airtravel']['nb_words_airtravel_{}_open'.format(question)].quantile(i/100)
     dict_text['airtravel'][question]['length_answer_max'] = data_pilot['airtravel']['nb_words_airtravel_{}_open'.format(question)].max()
 
+del question, i
 
 ### Vehicle
 data_pilot['vehicle']['asked_why_against'] = (
@@ -690,6 +705,8 @@ for question in ['why_against', 'why_neutral', 'why_diesel', 'why_favorable', 'e
             data_pilot['vehicle']['nb_words_vehicle_{}_open'.format(question)].quantile(i/100)
     dict_text['vehicle'][question]['length_answer_max'] = data_pilot['vehicle']['nb_words_vehicle_{}_open'.format(question)].max()
 
+del question, i
+
 
 ### Vaccine
 data_pilot['vaccine']['asked_why_against'] = (
@@ -720,6 +737,8 @@ for question in ['why_against', 'why_neutral', 'why_favorable', 'poor_country_ar
             data_pilot['vaccine']['nb_words_vaccine_{}_open'.format(question)].quantile(i/100)
     dict_text['vaccine'][question]['length_answer_max'] = data_pilot['vaccine']['nb_words_vaccine_{}_open'.format(question)].max()
 
+del question, i
+
 
 ### End of survey box
 data_pilot['full']['nb_words_end_of_survey_box_open'] = data_pilot['full']['end_of_survey_box'].str.len()
@@ -732,6 +751,8 @@ for i in [10,25,50,75,90]:
     dict_text_end_survey['length_answer_percentile_{}'.format(i)] = \
         data_pilot['full']['nb_words_end_of_survey_box_open'].quantile(i/100)
 dict_text_end_survey['length_answer_max'] = data_pilot['full']['nb_words_end_of_survey_box_open'].max()
+
+del i
 
 
 ##### Create latex file with summary statistics
@@ -787,6 +808,8 @@ for topic in ['meat', 'airtravel', 'vehicle', 'vaccine']:
         
 latex_file = latex_file.replace("begin{table}", "begin{table}[h!]")
 
+del topic, question, tag, title, short_title, section_title
+
 
 ### Common occurrence tags
 dict_cross_frequency_tags = {}
@@ -801,9 +824,8 @@ for topic in ['meat', 'airtravel', 'vehicle', 'vaccine']:
                     data_pilot[topic][data_pilot[topic]['tags_answer_{}'.format(question)].str.contains(tag_raw, regex=True)]['tags_answer_{}'.format(question)].str.contains(tag_col, regex=True).sum()
                     )
         dict_cross_frequency_tags[topic][question] = df_cross_frequency
-del df_cross_frequency
+
+del df_cross_frequency, topic, question, tags, tag_raw, tag_col
+
 
 # TODO: Display most common words
-# TODO: treat end of survey end box
-
-#Chantier ->

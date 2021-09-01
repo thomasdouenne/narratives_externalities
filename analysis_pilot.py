@@ -2,7 +2,9 @@
 
 
 """
-This script analyzes the data collected from the Qualtrics pilot survey on narratives and externalities
+This script produces descriptive statistics about the data collected from the
+Qualtrics pilot survey on narratives and externalities.
+The main outpout is a latex file that gathers many tables with descriptive statistics about the sample
 """
 
 from __future__ import division
@@ -578,6 +580,9 @@ for theme in ['socio_demographics', 'ideology', 'cc_science']:
 latex_file = latex_file.replace('\end{document}',
     '\n' + '\\section{Attitudes and views on four topics}' + '\n' + '\end{document}')
 
+del theme, question, section_title, title
+
+
 ### Respondents attitude and views on topics
 for topic in ['meat', 'airtravel', 'vehicle', 'vaccine']:
     dict_latex_tables[topic] = {}
@@ -613,6 +618,8 @@ dict_latex_tables['vaccine']['joint_own_desirable'] = dict_topics['vaccine']['jo
     float_format="{:.0%}".format,
     column_format='p{3.0cm}|p{1.8cm}p{1.8cm}p{1.8cm}p{1.8cm}p{1.8cm}p{1.8cm}p{1.8cm}',
     )
+
+del topic
     
 for topic in ['meat', 'airtravel', 'vehicle', 'vaccine']:
     dict_latex_tables['full_tables'][topic] = ''
@@ -648,8 +655,6 @@ for topic in ['meat', 'airtravel', 'vehicle', 'vaccine']:
         
 latex_file = latex_file.replace("begin{table}", "begin{table}[h!]")
 
-
-
-#Chantier ->
+del topic, questions, question, section_title, title
 
 # TODO: check if there is a way to create sections in the script
