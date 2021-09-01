@@ -826,6 +826,3 @@ for topic in ['meat', 'airtravel', 'vehicle', 'vaccine']:
         dict_cross_frequency_tags[topic][question] = df_cross_frequency
 
 del df_cross_frequency, topic, question, tags, tag_raw, tag_col
-
-
-# TODO: Display most common words

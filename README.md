@@ -7,7 +7,7 @@
 - Step 1: download data_qualtrics_pilot_narratives_raw.csv
 - Step 2: run /preparation.py
 - Step 3: explore answers to close ended questions with analysis_pilot.py
-    and/or to close ended questions with analysis_open_questions_pilot.py
+    and/or to close ended questions with analysis_open_questions_pilot.py and word_clouds.py
 
 # List of files
 data_qualtrics_pilot_narratives_raw.csv : this is the raw dataset directly downloaded from the Qualtrics survey
@@ -17,3 +17,4 @@ data_qualtrics_pilot_narratives_raw.csv : this is the raw dataset directly downl
 /caracteristiques_communes.py : depreciated, creates a .csv file that matches all French cities to their zip code
 /LICENSE : GNU AFFERO GENERAL PUBLIC LICENSE
 /preparation.py : from the raw dataset, produces a workable dataset with proper variable names and a set of additional useful variables
+/word_clouds.py : produces word clouds to display the most common words in open-ended answers
