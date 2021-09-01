@@ -787,9 +787,23 @@ for topic in ['meat', 'airtravel', 'vehicle', 'vaccine']:
         
 latex_file = latex_file.replace("begin{table}", "begin{table}[h!]")
 
+
+### Common occurrence tags
+dict_cross_frequency_tags = {}
+for topic in ['meat', 'airtravel', 'vehicle', 'vaccine']:
+    dict_cross_frequency_tags[topic] = {}
+    for question in dict_tags[topic]:
+        tags = dict_tags[topic][question].keys()
+        df_cross_frequency = pd.DataFrame(index=tags, columns=tags).fillna(0)
+        for tag_raw in tags:
+            for tag_col in tags:
+                df_cross_frequency[tag_raw][tag_col] = (
+                    data_pilot[topic][data_pilot[topic]['tags_answer_{}'.format(question)].str.contains(tag_raw, regex=True)]['tags_answer_{}'.format(question)].str.contains(tag_col, regex=True).sum()
+                    )
+        dict_cross_frequency_tags[topic][question] = df_cross_frequency
+del df_cross_frequency
+
 # TODO: Display most common words
 # TODO: treat end of survey end box
-# TODO: stats common occurence of tags
 
 #Chantier ->
-
