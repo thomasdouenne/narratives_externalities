@@ -12,7 +12,7 @@ from __future__ import division
 
 import pandas as pd
 
-##### Read data from Qualtrics
+##### Read data
 data_pilot = {}
 
 data_pilot['full'] = \

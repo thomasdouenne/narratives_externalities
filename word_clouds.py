@@ -1,18 +1,21 @@
-#import numpy as np
+  # -*- coding: utf-8 -*-
+
+
+"""
+This script produces word clouds to display the most common words in open-ended answers
+from the Qualtrics pilot survey on narratives and externalities.
+"""
+
+
 import pandas as pd
-#from os import path
-#from PIL import Image
-from wordcloud import WordCloud#, STOPWORDS, ImageColorGenerator
-
 import matplotlib.pyplot as plt
-## % matplotlib inline
 
-#import nltk
+from wordcloud import WordCloud
 from nltk.corpus import stopwords
 
-stopwords = stopwords.words('french')
+stopwords = stopwords.words('french') + [u'c\'est', 'a']
 
-# Load in the dataframe
+# Load data
 data_pilot = {}
 
 data_pilot['full'] = \
@@ -61,12 +64,43 @@ for topic in ['meat', 'airtravel', 'vehicle', 'vaccine']:
             ' '.join([str(item) for item in data_pilot[topic]['{0}_{1}_open'.format(topic, question)].dropna().tolist()])
 
         wordcloud = WordCloud(
-        stopwords=stopwords,
-        background_color='white'
-        ).generate(text_topics[topic][question])
+            stopwords=stopwords,
+            background_color='white'
+            ).generate(text_topics[topic][question])
     
         plt.imshow(wordcloud, interpolation='bilinear')
         plt.axis("off")
         plt.show()
         
         wordcloud.to_file(r'C:\Users\TDOUENN\Documents\Projects\Narratives\Data\Word_clouds\{0}\{1}.png'.format(topic, question))
+
+
+total_text = ' '
+for topic in ['meat', 'airtravel', 'vehicle', 'vaccine']:
+    topic_text = ' '
+    for question in text_topics[topic]:
+        topic_text = topic_text + text_topics[topic][question]
+
+    total_text = total_text + topic_text
+        
+    wordcloud = WordCloud(
+        stopwords=stopwords,
+        background_color='white'
+        ).generate(topic_text)
+
+    plt.imshow(wordcloud, interpolation='bilinear')
+    plt.axis("off")
+    plt.show()
+    
+    wordcloud.to_file(r'C:\Users\TDOUENN\Documents\Projects\Narratives\Data\Word_clouds\{0}\all_questions_together.png'.format(topic))
+
+wordcloud = WordCloud(
+    stopwords=stopwords,
+    background_color='white'
+    ).generate(total_text)
+
+plt.imshow(wordcloud, interpolation='bilinear')
+plt.axis("off")
+plt.show()
+
+wordcloud.to_file(r'C:\Users\TDOUENN\Documents\Projects\Narratives\Data\Word_clouds\all_questions_together.png')
