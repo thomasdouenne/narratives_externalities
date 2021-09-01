@@ -581,6 +581,40 @@ latex_file = latex_file.replace('\end{document}',
 ### Respondents attitude and views on topics
 for topic in ['meat', 'airtravel', 'vehicle', 'vaccine']:
     dict_latex_tables[topic] = {}
+dict_latex_tables['meat']['joint_own_desirable'] = dict_topics['meat']['joint_own_desirable'].to_latex(
+    caption='Opinions about desirable meat consumption (raws) by own meat consumption (columns)',
+    float_format="{:.0%}".format,
+    column_format='p{3.0cm}|p{1.8cm}p{1.8cm}p{1.8cm}p{1.8cm}p{1.8cm}p{1.8cm}p{1.8cm}',
+    )
+
+dict_latex_tables['airtravel']['joint_own_desirable'] = dict_topics['airtravel']['joint_own_desirable'].to_latex(
+    caption='Opinions about desirable air travel frequency (raws) by own air travel frequency (columns)',
+    float_format="{:.0%}".format,
+    column_format='p{5.0cm}|p{2.0cm}p{2.0cm}p{2.0cm}p{2.0cm}p{2.0cm}',
+    )
+
+dict_latex_tables['vehicle']['joint_carbon_quintile_desirable'] = dict_topics['vehicle']['joint_carbon_quintile_desirable'].to_latex(
+    caption='Opinions about the future of thermal vehicles (raws) by CO2 quintile (columns)',
+    float_format="{:.0%}".format,
+    column_format='p{5.0cm}|p{2.0cm}p{2.0cm}p{2.0cm}p{2.0cm}p{2.0cm}',
+    )
+dict_latex_tables['vehicle']['joint_nb_vehicles_desirable'] = dict_topics['vehicle']['joint_nb_vehicles_desirable'].to_latex(
+    caption='Opinions about the future of thermal vehicles (raws) by vehicle ownership (columns)',
+    float_format="{:.0%}".format,
+    column_format='p{9.0cm}|p{2.0cm}p{2.0cm}p{2.0cm}',
+    )
+dict_latex_tables['vehicle']['joint_own_desirable'] = (
+    dict_latex_tables['vehicle']['joint_carbon_quintile_desirable'] + '\n'
+    + dict_latex_tables['vehicle']['joint_nb_vehicles_desirable']
+    )
+
+dict_latex_tables['vaccine']['joint_own_desirable'] = dict_topics['vaccine']['joint_own_desirable'].to_latex(
+    caption='Opinions about mandatory covid vaccination (raws) by own vaccination status (columns)',
+    float_format="{:.0%}".format,
+    column_format='p{3.0cm}|p{1.8cm}p{1.8cm}p{1.8cm}p{1.8cm}p{1.8cm}p{1.8cm}p{1.8cm}',
+    )
+    
+for topic in ['meat', 'airtravel', 'vehicle', 'vaccine']:
     dict_latex_tables['full_tables'][topic] = ''
     if topic == 'meat':
         questions = ['meat_frequency_respondent', 'meat_frequency_desirable']
@@ -604,6 +638,11 @@ for topic in ['meat', 'airtravel', 'vehicle', 'vaccine']:
         dict_latex_tables['full_tables'][topic] = (
             dict_latex_tables['full_tables'][topic] + '\n' + dict_latex_tables[topic][question]
             )
+    
+    dict_latex_tables['full_tables'][topic] = (
+        dict_latex_tables['full_tables'][topic] + '\n' + dict_latex_tables[topic]['joint_own_desirable']
+        )
+        
     latex_file = latex_file.replace("\end{document}",
         '\\clearpage' + '\n' + '{}'.format(section_title) + '\n' + dict_latex_tables['full_tables'][topic] + '\n' + "\end{document}" )
         
@@ -613,34 +652,4 @@ latex_file = latex_file.replace("begin{table}", "begin{table}[h!]")
 
 #Chantier ->
 
-### Respondents own attitude and beliefs about desirable outcome on each topic
-dict_latex_tables['meat']['joint_own_desirable'] = dict_topics['meat']['joint_own_desirable'].to_latex(
-    caption='Opinions about desirable meat consumption (raws) by own meat consumption (columns)',
-    float_format="{:.0%}".format,
-    column_format='p{3.0cm}|p{1.8cm}p{1.8cm}p{1.8cm}p{1.8cm}p{1.8cm}p{1.8cm}p{1.8cm}',
-    )
-
-dict_latex_tables['airtravel']['joint_own_desirable'] = dict_topics['airtravel']['joint_own_desirable'].to_latex(
-    caption='Opinions about desirable air travel frequency (raws) by own air travel frequency (columns)',
-    float_format="{:.0%}".format,
-    column_format='p{5.0cm}|p{2.0cm}p{2.0cm}p{2.0cm}p{2.0cm}p{2.0cm}',
-    )
-
-dict_latex_tables['vehicle']['joint_carbon_quintile_desirable'] = dict_topics['vehicle']['joint_carbon_quintile_desirable'].to_latex(
-    caption='Opinions about the future of thermal vehicles (raws) by CO2 quintile (columns)',
-    float_format="{:.0%}".format,
-    column_format='p{5.0cm}|p{2.0cm}p{2.0cm}p{2.0cm}p{2.0cm}p{2.0cm}',
-    )
-dict_latex_tables['vehicle']['joint_nb_vehicles_desirable'] = dict_topics['vehicle']['joint_nb_vehicles_desirable'].to_latex(
-    caption='Opinions about the future of thermal vehicles (raws) by vehicle ownership (columns)',
-    float_format="{:.0%}".format,
-    column_format='p{9.0cm}|p{2.0cm}p{2.0cm}p{2.0cm}',
-    )
-
-dict_latex_tables['vaccine']['joint_own_desirable'] = dict_topics['vaccine']['joint_own_desirable'].to_latex(
-    caption='Opinions about mandatory covid vaccination (raws) by own vaccination status (columns)',
-    float_format="{:.0%}".format,
-    column_format='p{3.0cm}|p{1.8cm}p{1.8cm}p{1.8cm}p{1.8cm}p{1.8cm}p{1.8cm}p{1.8cm}',
-    )
-    
 # TODO: check if there is a way to create sections in the script
