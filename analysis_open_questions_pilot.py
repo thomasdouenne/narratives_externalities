@@ -678,7 +678,7 @@ data_pilot['vehicle']['asked_electric_pollutes_more_argument'] = (
 data_pilot['vehicle']['asked_thermal_pollutes_more_argument'] = 1 - data_pilot['vehicle']['asked_electric_pollutes_more_argument']
 
 dict_text['vehicle'] = {}
-for question in ['why_against', 'why_neutral', 'why_favorable', 'electric_pollutes_more_argument', 'thermal_pollutes_more_argument']:
+for question in ['why_against', 'why_neutral', 'why_diesel', 'why_favorable', 'electric_pollutes_more_argument', 'thermal_pollutes_more_argument']:
     data_pilot['vehicle']['nb_words_vehicle_{}_open'.format(question)] = data_pilot['vehicle']['vehicle_{}_open'.format(question)].str.len()
     dict_text['vehicle'][question] = {}
 
@@ -734,30 +734,62 @@ for i in [10,25,50,75,90]:
 dict_text_end_survey['length_answer_max'] = data_pilot['full']['nb_words_end_of_survey_box_open'].max()
 
 
-# TODO: Do some stats over tags
+##### Create latex file with summary statistics
+data_pilot['labels'] = \
+    pd.read_csv(r'C:\Users\TDOUENN\Documents\Projects\Narratives\Data\data_qualtrics_pilot_narratives_labels.csv', sep=',', index_col=0)
+
+dict_variables = data_pilot['labels'].to_dict()
+
+
+latex_file = open(r"C:\Users\TDOUENN\Documents\Projects\Narratives\Data\latex_template.txt").read()
+
+dict_latex_tables = {}
+dict_latex_tables['full_tables'] = {}
+
+dict_frequency_tags = {}
+for topic in ['meat', 'airtravel', 'vehicle', 'vaccine']:
+    dict_latex_tables[topic] = {}
+    dict_frequency_tags[topic] = {}
+    dict_latex_tables['full_tables'][topic] = ' '
+
+    if topic == 'meat':
+        section_title = '\section{Meat}'
+    elif topic == 'airtravel':
+        section_title = '\section{Air travel}'
+    elif topic == 'vehicle':
+        section_title = '\section{Vehicle}'
+    elif topic == 'vaccine':
+        section_title = '\section{Vaccine}'
+
+    for question in dict_tags[topic]:
+        dict_frequency_tags[topic][question] = {}
+        for tag in dict_tags[topic][question].keys():
+            dict_frequency_tags[topic][question][tag] = data_pilot[topic]['tags_answer_{}'.format(question)].str.count(tag).sum()
+
+        dict_frequency_tags[topic][question][u'Total number of answers'] = dict_text[topic][question]['nb_answered']
+
+        title = dict_variables['Question_survey'][topic + '_' + question + '_open']
+        short_title = title.replace(u'Merci de détailler votre réponse afin que nous puissions prendre en compte votre opinion le mieux possible.', '').rstrip('\n')
+        
+        dict_latex_tables[topic][question] = \
+        pd.DataFrame.from_dict(dict_frequency_tags[topic][question], orient='index',
+                           columns=['Number']).sort_values(by='Number', ascending=False).to_latex(
+            caption='\"{}\"'.format(short_title),
+            float_format="{:.0%}".format,
+            )
+
+        dict_latex_tables['full_tables'][topic] = (
+            dict_latex_tables['full_tables'][topic] + '\n' + dict_latex_tables[topic][question]
+            )
+
+    latex_file = latex_file.replace("\end{document}",
+        '\\clearpage' + '\n' + '{}'.format(section_title) + '\n' + dict_latex_tables['full_tables'][topic] + '\n' + "\end{document}" )
+        
+latex_file = latex_file.replace("begin{table}", "begin{table}[h!]")
+
 # TODO: Display most common words
 # TODO: treat end of survey end box
+# TODO: stats common occurence of tags
 
-"""
-Chantier ->
-
-dict_tags['meat']['why_against'] = {
-    'Health': [8,17,34,50,62,88,95,128,196,207,211,305,344,357,380,398,449,537,550,606,703,
-               719,821,838,992,2833,3236,3237],
-    'Cancer': [128, 380, 992],
-    'Cardiovascular_diseases': [606],
-    'Unnecessary_health': [34,95,207,313,380,397,719],
-    'Varied_diet': [17,80,334],
-    'Animal_welfare': [62,246,294,344,357,537,1273,2833],
-    'Environment': [211,246,357,493,512,537,902,929,3236],
-    'Quality': [170],
-    'Opposite_argument': [],
-    'Dont_know': [269],
-    'Unclear_undetermined': [57,100,228,453],
-    }
-
-tag = 'Unclear_undetermined'
-data_pilot['meat']['tags_answer_why_against'].str.count(tag).sum()
-
-"""
+#Chantier ->
 
