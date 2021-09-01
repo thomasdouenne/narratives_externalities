@@ -26,6 +26,7 @@ answers_open_end_box = data_pilot['full']['end_of_survey_box'].dropna()
 answers_open_end_box.to_csv(r'C:\Users\TDOUENN\Documents\Projects\Narratives\Data\Text_open_questions\open_end_box.csv',
                             sep=';', encoding='utf-8-sig', index=True)
 
+dict_tags = {}
 ### Meat
 answers_meat_why_against_open = data_pilot['meat']['meat_why_against_open'].dropna()
 answers_meat_why_against_open.to_csv(r'C:\Users\TDOUENN\Documents\Projects\Narratives\Data\Text_open_questions\Meat\meat_why_against.csv',
@@ -47,8 +48,8 @@ answers_meat_carbon_footprint_argument_open = data_pilot['meat']['meat_carbon_fo
 answers_meat_carbon_footprint_argument_open.to_csv(r'C:\Users\TDOUENN\Documents\Projects\Narratives\Data\Text_open_questions\Meat\meat_carbon_footprint_argument.csv',
                             sep=';', encoding='utf-8-sig', index=True)
 
-dict_tags_meat = {}
-dict_tags_meat['why_against'] = {
+dict_tags['meat'] = {}
+dict_tags['meat']['why_against'] = {
     'Health': [8,17,34,50,62,88,95,128,196,207,211,305,344,357,380,398,449,537,550,606,703,
                719,821,838,992,2833,3236,3237],
     'Cancer': [128, 380, 992],
@@ -63,7 +64,7 @@ dict_tags_meat['why_against'] = {
     'Unclear_undetermined': [57,100,228,453],
     }
 
-dict_tags_meat['why_favorable'] = {
+dict_tags['meat']['why_favorable'] = {
     'Health': [19,28,42,43,52,64,78,97,110,112,118,123,133, 146,152,154,166,188,197,205,212,216,242,248,
                250,255,271,278,302,330,347,351,375,400,409,410,418,424,428,475,485,520,548,651,655,725,
                765,781,892,1177,1214,1355,2463,3221,3242,3346],
@@ -88,7 +89,7 @@ dict_tags_meat['why_favorable'] = {
     'Unclear_undetermined': [139,140,204,226,239,368,532,579,620,877,968,976,3301],
     }
 
-dict_tags_meat['why_neutral'] = {
+dict_tags['meat']['why_neutral'] = {
     'Free_choice': [180,303],
     'Health': [490],
     'Animal_welfare': [708],
@@ -102,7 +103,7 @@ dict_tags_meat['why_neutral'] = {
     'Unclear_undetermined': [23,436],
     }
 
-dict_tags_meat['landscape_argument'] = {
+dict_tags['meat']['landscape_argument'] = {
     'Agree': [8,17,50,57,88,181,186,303,344,357,398,490,537,606,902,929,1097,3236,3237],
     'Not_fully_agree': [34,95,100,449,493,719],
     'Possible_reconversion_farmers': [344],
@@ -114,7 +115,7 @@ dict_tags_meat['landscape_argument'] = {
     'Unclear_undetermined': [8,17,23,180,196,228,313,398,453,550,719,992],
     }
 
-dict_tags_meat['carbon_footprint_argument'] = {
+dict_tags['meat']['carbon_footprint_argument'] = {
     'Agree': [19,28,29,42,97,123,140,154,188,212,217,218,278,302,315,317,339,428,465,475,485,725,765,877,2463,3297,3301],
     'It_depends': [28,78,112,139,262,330,400,1355,3346],
     'Uncertain': [97,123,146,152,204,242,271,347,351,360,475,725],
@@ -132,29 +133,29 @@ dict_tags_meat['carbon_footprint_argument'] = {
     }
 
 data_pilot['meat']['tags_answer_why_against'] = ''
-for element in dict_tags_meat['why_against'].keys():
-    data_pilot['meat'].loc[dict_tags_meat['why_against'][element],'tags_answer_why_against'] = \
-        element + ';' + data_pilot['meat'].loc[dict_tags_meat['why_against'][element],'tags_answer_why_against']
+for element in dict_tags['meat']['why_against'].keys():
+    data_pilot['meat'].loc[dict_tags['meat']['why_against'][element],'tags_answer_why_against'] = \
+        element + ';' + data_pilot['meat'].loc[dict_tags['meat']['why_against'][element],'tags_answer_why_against']
 
 data_pilot['meat']['tags_answer_why_neutral'] = ''
-for element in dict_tags_meat['why_neutral'].keys():
-    data_pilot['meat'].loc[dict_tags_meat['why_neutral'][element],'tags_answer_why_neutral'] = \
-        element + ';' + data_pilot['meat'].loc[dict_tags_meat['why_neutral'][element],'tags_answer_why_neutral']
+for element in dict_tags['meat']['why_neutral'].keys():
+    data_pilot['meat'].loc[dict_tags['meat']['why_neutral'][element],'tags_answer_why_neutral'] = \
+        element + ';' + data_pilot['meat'].loc[dict_tags['meat']['why_neutral'][element],'tags_answer_why_neutral']
 
 data_pilot['meat']['tags_answer_why_favorable'] = ''
-for element in dict_tags_meat['why_favorable'].keys():
-    data_pilot['meat'].loc[dict_tags_meat['why_favorable'][element],'tags_answer_why_favorable'] = \
-        element + ';' + data_pilot['meat'].loc[dict_tags_meat['why_favorable'][element],'tags_answer_why_favorable']
+for element in dict_tags['meat']['why_favorable'].keys():
+    data_pilot['meat'].loc[dict_tags['meat']['why_favorable'][element],'tags_answer_why_favorable'] = \
+        element + ';' + data_pilot['meat'].loc[dict_tags['meat']['why_favorable'][element],'tags_answer_why_favorable']
 
 data_pilot['meat']['tags_answer_landscape_argument'] = ''
-for element in dict_tags_meat['landscape_argument'].keys():
-    data_pilot['meat'].loc[dict_tags_meat['landscape_argument'][element],'tags_answer_landscape_argument'] = \
-        element + ';' + data_pilot['meat'].loc[dict_tags_meat['landscape_argument'][element],'tags_answer_landscape_argument']
+for element in dict_tags['meat']['landscape_argument'].keys():
+    data_pilot['meat'].loc[dict_tags['meat']['landscape_argument'][element],'tags_answer_landscape_argument'] = \
+        element + ';' + data_pilot['meat'].loc[dict_tags['meat']['landscape_argument'][element],'tags_answer_landscape_argument']
 
 data_pilot['meat']['tags_answer_carbon_footprint_argument'] = ''
-for element in dict_tags_meat['carbon_footprint_argument'].keys():
-    data_pilot['meat'].loc[dict_tags_meat['carbon_footprint_argument'][element],'tags_answer_carbon_footprint_argument'] = \
-        element + ';' + data_pilot['meat'].loc[dict_tags_meat['carbon_footprint_argument'][element],'tags_answer_carbon_footprint_argument']
+for element in dict_tags['meat']['carbon_footprint_argument'].keys():
+    data_pilot['meat'].loc[dict_tags['meat']['carbon_footprint_argument'][element],'tags_answer_carbon_footprint_argument'] = \
+        element + ';' + data_pilot['meat'].loc[dict_tags['meat']['carbon_footprint_argument'][element],'tags_answer_carbon_footprint_argument']
 
 
 ##### Air travel
@@ -178,8 +179,8 @@ answers_airtravel_carbon_footprint_argument_open = data_pilot['airtravel']['airt
 answers_airtravel_carbon_footprint_argument_open.to_csv(r'C:\Users\TDOUENN\Documents\Projects\Narratives\Data\Text_open_questions\Airtravel\airtravel_carbon_argument.csv',
                             sep=';', encoding='utf-8-sig', index=True)
 
-dict_tags_airtravel = {}
-dict_tags_airtravel['why_against'] = {
+dict_tags['airtravel'] = {}
+dict_tags['airtravel']['why_against'] = {
     'Pollution': [12,16,25,26,41,86,124,142,147,165,171,178,184,214,215,
                   270,291,312,318,361,367,378,390,392,425,431,484,503,508,
                   527,544,653,715,903,1227,3285,3762],
@@ -194,7 +195,7 @@ dict_tags_airtravel['why_against'] = {
     'Unclear_undetermined': [126,252,322,386,442,3224,3775],
     }
 
-dict_tags_airtravel['why_favorable'] = {
+dict_tags['airtravel']['why_favorable'] = {
     'Discover_the_world': [44,66,108,153,200,225,229,374,389,420,971,1278],
     'To_go_everywhere': [51,63,66,225,229,335,374,389,420,971,1278],
     'Quicker': [51,63,79,107,114,119,136,175,233,235,254,279,783,971,1101],
@@ -211,7 +212,7 @@ dict_tags_airtravel['why_favorable'] = {
     'Unclear_undetermined': [160,198,258,358,737,1200],
     }
 
-dict_tags_airtravel['why_neutral'] = {
+dict_tags['airtravel']['why_neutral'] = {
     'Pollution': [22,83,89,287,310,385,509,636,675,732,856,896,939,2706,3231,3235],
     'Virus_spreading': [201],
     'Noise': [],
@@ -233,7 +234,7 @@ dict_tags_airtravel['why_neutral'] = {
     'Unclear_undetermined': [3238],
     }
 
-dict_tags_airtravel['open_mindedness_argument'] = {
+dict_tags['airtravel']['open_mindedness_argument'] = {
     'Agree': [16,22,25,26,41,69,86,89,94,104,124,142,147,165,171,184,185,201,
               214,215,224,231,247,252,270,288,291,310,318,332,343,361,364,367,
               385,386,390,392,407,408,419,425,432,433,452,460,461,471,484,503,
@@ -249,7 +250,7 @@ dict_tags_airtravel['open_mindedness_argument'] = {
     'Unclear_undetermined': [94,126,442,3238],
     }
 
-dict_tags_airtravel['carbon_footprint_argument'] = {
+dict_tags['airtravel']['carbon_footprint_argument'] = {
     'Agree': [63,66,98,107,108,119,136,153,160,254,279,301,335,389,420,577,783,971],
     'Not_true': [51,138,175,198,200,233,235,358,374,3239],
     'It_depends': [51,79,136,160,326,737,783],
@@ -262,29 +263,29 @@ dict_tags_airtravel['carbon_footprint_argument'] = {
 
 
 data_pilot['airtravel']['tags_answer_why_against'] = ''
-for element in dict_tags_airtravel['why_against'].keys():
-    data_pilot['airtravel'].loc[dict_tags_airtravel['why_against'][element],'tags_answer_why_against'] = \
-        element + ';' + data_pilot['airtravel'].loc[dict_tags_airtravel['why_against'][element],'tags_answer_why_against']
+for element in dict_tags['airtravel']['why_against'].keys():
+    data_pilot['airtravel'].loc[dict_tags['airtravel']['why_against'][element],'tags_answer_why_against'] = \
+        element + ';' + data_pilot['airtravel'].loc[dict_tags['airtravel']['why_against'][element],'tags_answer_why_against']
 
 data_pilot['airtravel']['tags_answer_why_neutral'] = ''
-for element in dict_tags_airtravel['why_neutral'].keys():
-    data_pilot['airtravel'].loc[dict_tags_airtravel['why_neutral'][element],'tags_answer_why_neutral'] = \
-        element + ';' + data_pilot['airtravel'].loc[dict_tags_airtravel['why_neutral'][element],'tags_answer_why_neutral']
+for element in dict_tags['airtravel']['why_neutral'].keys():
+    data_pilot['airtravel'].loc[dict_tags['airtravel']['why_neutral'][element],'tags_answer_why_neutral'] = \
+        element + ';' + data_pilot['airtravel'].loc[dict_tags['airtravel']['why_neutral'][element],'tags_answer_why_neutral']
 
 data_pilot['airtravel']['tags_answer_why_favorable'] = ''
-for element in dict_tags_airtravel['why_favorable'].keys():
-    data_pilot['airtravel'].loc[dict_tags_airtravel['why_favorable'][element],'tags_answer_why_favorable'] = \
-        element + ';' + data_pilot['airtravel'].loc[dict_tags_airtravel['why_favorable'][element],'tags_answer_why_favorable']
+for element in dict_tags['airtravel']['why_favorable'].keys():
+    data_pilot['airtravel'].loc[dict_tags['airtravel']['why_favorable'][element],'tags_answer_why_favorable'] = \
+        element + ';' + data_pilot['airtravel'].loc[dict_tags['airtravel']['why_favorable'][element],'tags_answer_why_favorable']
 
 data_pilot['airtravel']['tags_answer_open_mindedness_argument'] = ''
-for element in dict_tags_airtravel['open_mindedness_argument'].keys():
-    data_pilot['airtravel'].loc[dict_tags_airtravel['open_mindedness_argument'][element],'tags_answer_open_mindedness_argument'] = \
-        element + ';' + data_pilot['airtravel'].loc[dict_tags_airtravel['open_mindedness_argument'][element],'tags_answer_open_mindedness_argument']
+for element in dict_tags['airtravel']['open_mindedness_argument'].keys():
+    data_pilot['airtravel'].loc[dict_tags['airtravel']['open_mindedness_argument'][element],'tags_answer_open_mindedness_argument'] = \
+        element + ';' + data_pilot['airtravel'].loc[dict_tags['airtravel']['open_mindedness_argument'][element],'tags_answer_open_mindedness_argument']
 
 data_pilot['airtravel']['tags_answer_carbon_footprint_argument'] = ''
-for element in dict_tags_airtravel['carbon_footprint_argument'].keys():
-    data_pilot['airtravel'].loc[dict_tags_airtravel['carbon_footprint_argument'][element],'tags_answer_carbon_footprint_argument'] = \
-        element + ';' + data_pilot['airtravel'].loc[dict_tags_airtravel['carbon_footprint_argument'][element],'tags_answer_carbon_footprint_argument']
+for element in dict_tags['airtravel']['carbon_footprint_argument'].keys():
+    data_pilot['airtravel'].loc[dict_tags['airtravel']['carbon_footprint_argument'][element],'tags_answer_carbon_footprint_argument'] = \
+        element + ';' + data_pilot['airtravel'].loc[dict_tags['airtravel']['carbon_footprint_argument'][element],'tags_answer_carbon_footprint_argument']
 
 
 ##### Vehicle
@@ -312,8 +313,8 @@ answers_vehicle_thermal_pollutes_more_argument_open = data_pilot['vehicle']['veh
 answers_vehicle_thermal_pollutes_more_argument_open.to_csv(r'C:\Users\TDOUENN\Documents\Projects\Narratives\Data\Text_open_questions\Vehicle\vehicle_thermal_pollutes_more_argument.csv',
                             sep=';', encoding='utf-8-sig', index=True)
 
-dict_tags_vehicle = {}
-dict_tags_vehicle['why_against'] = {
+dict_tags['vehicle'] = {}
+dict_tags['vehicle']['why_against'] = {
     'Environment': [10,11,27,33,87,102,105,111,116,134,137,195,199,206,222,223,243,251,
                     256,289,295,309,316,331,383,404,439,443,454,480,717,723,804,822,938,
                     1186,3233,3234,3377],
@@ -326,7 +327,7 @@ dict_tags_vehicle['why_against'] = {
     'Unclear_undetermined': [27,134,598],
     }
 
-dict_tags_vehicle['why_favorable'] = {
+dict_tags['vehicle']['why_favorable'] = {
     'EV_pollute_as_much_or_more': [39,47,127,156,244,257,275,319,329,342,354,379,
                                    395,401,444,654,673,905],
     'EV_construction_pollutes': [39,49,329,354,401,654,740],
@@ -353,7 +354,7 @@ dict_tags_vehicle['why_favorable'] = {
     'Unclear_undetermined': [40,77,96,193,372,464,693],
     }
 
-dict_tags_vehicle['why_diesel'] = {
+dict_tags['vehicle']['why_diesel'] = {
     'Environment': [13,70,76,85,141,159,227,273,324,403,414,796],
     'Air_pollution': [13,141],
     'Batteries_pollute': [85],
@@ -364,7 +365,7 @@ dict_tags_vehicle['why_diesel'] = {
     'Unclear_undetermined': [129,268],
     }
 
-dict_tags_vehicle['why_neutral'] = {
+dict_tags['vehicle']['why_neutral'] = {
     'Environment': [58,422,473,540],
     'Batteries_pollute': [58],
     'Favor_bio_energies': [163],
@@ -375,7 +376,7 @@ dict_tags_vehicle['why_neutral'] = {
     'Unclear_undetermined': [540],
     }
 
-dict_tags_vehicle['electric_pollutes_more_argument'] = {
+dict_tags['vehicle']['electric_pollutes_more_argument'] = {
     'Agree': [10,11,24,87,105,163,222,256,296,383,540,598,723,3234,3377],
     'Not_true': [58,116,134,137,195,199,206,289,295,404,439,443,454,473,480,
                  717,804,1186],
@@ -391,7 +392,7 @@ dict_tags_vehicle['electric_pollutes_more_argument'] = {
     'Unclear_undetermined': [],
     }
 
-dict_tags_vehicle['thermal_pollutes_more_argument'] = {
+dict_tags['vehicle']['thermal_pollutes_more_argument'] = {
     'Agree': [60,71,99,125,127,141,156,227,236,268,293,299,324,325,337,342,354,
               371,387,394,395,435,469,551,672,673,777,898,942,991,1117,1229,
               1277],
@@ -418,34 +419,34 @@ dict_tags_vehicle['thermal_pollutes_more_argument'] = {
 
 
 data_pilot['vehicle']['tags_answer_why_against'] = ''
-for element in dict_tags_vehicle['why_against'].keys():
-    data_pilot['vehicle'].loc[dict_tags_vehicle['why_against'][element],'tags_answer_why_against'] = \
-        element + ';' + data_pilot['vehicle'].loc[dict_tags_vehicle['why_against'][element],'tags_answer_why_against']
+for element in dict_tags['vehicle']['why_against'].keys():
+    data_pilot['vehicle'].loc[dict_tags['vehicle']['why_against'][element],'tags_answer_why_against'] = \
+        element + ';' + data_pilot['vehicle'].loc[dict_tags['vehicle']['why_against'][element],'tags_answer_why_against']
 
 data_pilot['vehicle']['tags_answer_why_neutral'] = ''
-for element in dict_tags_vehicle['why_neutral'].keys():
-    data_pilot['vehicle'].loc[dict_tags_vehicle['why_neutral'][element],'tags_answer_why_neutral'] = \
-        element + ';' + data_pilot['vehicle'].loc[dict_tags_vehicle['why_neutral'][element],'tags_answer_why_neutral']
+for element in dict_tags['vehicle']['why_neutral'].keys():
+    data_pilot['vehicle'].loc[dict_tags['vehicle']['why_neutral'][element],'tags_answer_why_neutral'] = \
+        element + ';' + data_pilot['vehicle'].loc[dict_tags['vehicle']['why_neutral'][element],'tags_answer_why_neutral']
 
 data_pilot['vehicle']['tags_answer_why_diesel'] = ''
-for element in dict_tags_vehicle['why_diesel'].keys():
-    data_pilot['vehicle'].loc[dict_tags_vehicle['why_diesel'][element],'tags_answer_why_diesel'] = \
-        element + ';' + data_pilot['vehicle'].loc[dict_tags_vehicle['why_diesel'][element],'tags_answer_why_diesel']
+for element in dict_tags['vehicle']['why_diesel'].keys():
+    data_pilot['vehicle'].loc[dict_tags['vehicle']['why_diesel'][element],'tags_answer_why_diesel'] = \
+        element + ';' + data_pilot['vehicle'].loc[dict_tags['vehicle']['why_diesel'][element],'tags_answer_why_diesel']
 
 data_pilot['vehicle']['tags_answer_why_favorable'] = ''
-for element in dict_tags_vehicle['why_favorable'].keys():
-    data_pilot['vehicle'].loc[dict_tags_vehicle['why_favorable'][element],'tags_answer_why_favorable'] = \
-        element + ';' + data_pilot['vehicle'].loc[dict_tags_vehicle['why_favorable'][element],'tags_answer_why_favorable']
+for element in dict_tags['vehicle']['why_favorable'].keys():
+    data_pilot['vehicle'].loc[dict_tags['vehicle']['why_favorable'][element],'tags_answer_why_favorable'] = \
+        element + ';' + data_pilot['vehicle'].loc[dict_tags['vehicle']['why_favorable'][element],'tags_answer_why_favorable']
 
 data_pilot['vehicle']['tags_answer_electric_pollutes_more_argument'] = ''
-for element in dict_tags_vehicle['electric_pollutes_more_argument'].keys():
-    data_pilot['vehicle'].loc[dict_tags_vehicle['electric_pollutes_more_argument'][element],'tags_answer_electric_pollutes_more_argument'] = \
-        element + ';' + data_pilot['vehicle'].loc[dict_tags_vehicle['electric_pollutes_more_argument'][element],'tags_answer_electric_pollutes_more_argument']
+for element in dict_tags['vehicle']['electric_pollutes_more_argument'].keys():
+    data_pilot['vehicle'].loc[dict_tags['vehicle']['electric_pollutes_more_argument'][element],'tags_answer_electric_pollutes_more_argument'] = \
+        element + ';' + data_pilot['vehicle'].loc[dict_tags['vehicle']['electric_pollutes_more_argument'][element],'tags_answer_electric_pollutes_more_argument']
 
 data_pilot['vehicle']['tags_answer_thermal_pollutes_more_argument'] = ''
-for element in dict_tags_vehicle['thermal_pollutes_more_argument'].keys():
-    data_pilot['vehicle'].loc[dict_tags_vehicle['thermal_pollutes_more_argument'][element],'tags_answer_thermal_pollutes_more_argument'] = \
-        element + ';' + data_pilot['vehicle'].loc[dict_tags_vehicle['thermal_pollutes_more_argument'][element],'tags_answer_thermal_pollutes_more_argument']
+for element in dict_tags['vehicle']['thermal_pollutes_more_argument'].keys():
+    data_pilot['vehicle'].loc[dict_tags['vehicle']['thermal_pollutes_more_argument'][element],'tags_answer_thermal_pollutes_more_argument'] = \
+        element + ';' + data_pilot['vehicle'].loc[dict_tags['vehicle']['thermal_pollutes_more_argument'][element],'tags_answer_thermal_pollutes_more_argument']
 
 
 ##### Vaccine
@@ -469,8 +470,8 @@ answers_vaccine_protecting_others_argument_open = data_pilot['vaccine']['vaccine
 answers_vaccine_protecting_others_argument_open.to_csv(r'C:\Users\TDOUENN\Documents\Projects\Narratives\Data\Text_open_questions\Vaccine\vaccine_protecting_others_argument.csv',
                             sep=';', encoding='utf-8-sig', index=True)
 
-dict_tags_vaccine = {}
-dict_tags_vaccine['why_against'] = {
+dict_tags['vaccine'] = {}
+dict_tags['vaccine']['why_against'] = {
     'Health_risk_vaccin': [15,284,987],
     'Anti_vaccins': [172],
     'Lack_hindsight': [284,411,987],
@@ -482,7 +483,7 @@ dict_tags_vaccine['why_against'] = {
     'Unclear_undetermined': [18,382],
     }
 
-dict_tags_vaccine['why_favorable'] = {
+dict_tags['vaccine']['why_favorable'] = {
     'End_this_situation': [21,30,61,131,145,203,221,276,281,362,365,416,455,
                            665,750,771,817,953,1271,1770,2223,3240],
     'Reach_collective_immunity': [37,61,73,82,115,131,155,162,164,176,189,221,
@@ -505,21 +506,21 @@ dict_tags_vaccine['why_favorable'] = {
 # When people refer to 'eradiquer la pandemie', it is understood that they refer to all its implications so 'End_this_situation' is also applied, while 'eradiquer le virus' is simply understood as 'Reach_collective_immunity'
 # Safer often refers to more personal considerations
 
-dict_tags_vaccine['why_neutral'] = {
+dict_tags['vaccine']['why_neutral'] = {
     'End_this_situation': [31,130,393,445,852,881,3227],
     'Reach_collective_immunity': [54,65,130,320,391,405,445,775,1002],
     'Avoid_lockdowns': [219],
     'Avoid_new_wave': [101,219],
-    'Safer': [150,153,352,539,635,852,899],
+    'Safer': [150,183,352,539,635,852,899],
     'Avoid_variants': [363],
     'Avoid_transmissions': [101,106,113,130,323,463,472,832],
     'Limit_serious_cases': [101,263,277,539,899],
-    'Moral_responsibility': [153],
+    'Moral_responsibility': [183],
     'Economic_activity': [277],
     'Avoid_hospital_overload': [101,472],
     'Other_mandatory_vaccines_exist': [707],
     'Uncertainty_efficacy': [54,109,320],
-    'Health_risk_vaccin': [92,93,101,151,153,208,213,220,323,445,446,726,852,881],
+    'Health_risk_vaccin': [92,93,101,151,183,208,213,220,323,445,446,726,852,881],
     'Anti_vaccins': [],
     'Lack_hindsight': [93,101,151,208,213,220,323,333,445,446,645,852],
     'Distrust': [208,3257],
@@ -531,7 +532,7 @@ dict_tags_vaccine['why_neutral'] = {
     'Unclear_undetermined':[9,327,376],
     }
 
-dict_tags_vaccine['poor_country_argument'] = {
+dict_tags['vaccine']['poor_country_argument'] = {
     'Agree': [30,45,48,56,281,314,451,966,1100,1271],
     'Not_true': [21,38,61,176,177,221,230,264,265,328,399,440,482,611,687,
                  690,716,771,793,814,817,953,1770,2223,3222,3245],
@@ -551,7 +552,7 @@ dict_tags_vaccine['poor_country_argument'] = {
     'Unclear_undetermined': [194,209,665,750],
     }
 
-dict_tags_vaccine['protecting_others_argument'] = {
+dict_tags['vaccine']['protecting_others_argument'] = {
     'Agree': [31,54,65,93,101,113,130,150,167,183,208,219,220,240,277,306,
               333,376,382,391,445,472,635,645,707,775,832,899,987,1002,3227],
     'Not_true': [9,15,92,106,109,121,132,151,172,213,238,263,284,320,323,363,
@@ -567,8 +568,34 @@ dict_tags_vaccine['protecting_others_argument'] = {
     'Unclear_undetermined': [18,327,333,421,446,3257],
     }
 
+data_pilot['vaccine']['tags_answer_why_against'] = ''
+for element in dict_tags['vaccine']['why_against'].keys():
+    data_pilot['vaccine'].loc[dict_tags['vaccine']['why_against'][element],'tags_answer_why_against'] = \
+        element + ';' + data_pilot['vaccine'].loc[dict_tags['vaccine']['why_against'][element],'tags_answer_why_against']
+
+data_pilot['vaccine']['tags_answer_why_neutral'] = ''
+for element in dict_tags['vaccine']['why_neutral'].keys():
+    data_pilot['vaccine'].loc[dict_tags['vaccine']['why_neutral'][element],'tags_answer_why_neutral'] = \
+        element + ';' + data_pilot['vaccine'].loc[dict_tags['vaccine']['why_neutral'][element],'tags_answer_why_neutral']
+
+data_pilot['vaccine']['tags_answer_why_favorable'] = ''
+for element in dict_tags['vaccine']['why_favorable'].keys():
+    data_pilot['vaccine'].loc[dict_tags['vaccine']['why_favorable'][element],'tags_answer_why_favorable'] = \
+        element + ';' + data_pilot['vaccine'].loc[dict_tags['vaccine']['why_favorable'][element],'tags_answer_why_favorable']
+
+data_pilot['vaccine']['tags_answer_poor_country_argument'] = ''
+for element in dict_tags['vaccine']['poor_country_argument'].keys():
+    data_pilot['vaccine'].loc[dict_tags['vaccine']['poor_country_argument'][element],'tags_answer_poor_country_argument'] = \
+        element + ';' + data_pilot['vaccine'].loc[dict_tags['vaccine']['poor_country_argument'][element],'tags_answer_poor_country_argument']
+
+data_pilot['vaccine']['tags_answer_protecting_others_argument'] = ''
+for element in dict_tags['vaccine']['protecting_others_argument'].keys():
+    data_pilot['vaccine'].loc[dict_tags['vaccine']['protecting_others_argument'][element],'tags_answer_protecting_others_argument'] = \
+        element + ';' + data_pilot['vaccine'].loc[dict_tags['vaccine']['protecting_others_argument'][element],'tags_answer_protecting_others_argument']
+
 
 ##### Descriptive statistics length open-ended answers
+dict_text = {}
 
 ### Meat
 data_pilot['meat']['asked_why_against'] = (
@@ -587,18 +614,18 @@ data_pilot['meat']['asked_landscape_argument'] = (
     )
 data_pilot['meat']['asked_carbon_footprint_argument'] = data_pilot['meat']['asked_why_favorable']
 
-dict_text_meat = {}
+dict_text['meat'] = {}
 for question in ['why_against', 'why_neutral', 'why_favorable', 'landscape_argument', 'carbon_footprint_argument']:
     data_pilot['meat']['nb_words_meat_{}_open'.format(question)] = data_pilot['meat']['meat_{}_open'.format(question)].str.len()
-    dict_text_meat[question] = {}
+    dict_text['meat'][question] = {}
 
-    dict_text_meat[question]['nb_asked'] = data_pilot['meat']['asked_{}'.format(question)].sum()
-    dict_text_meat[question]['nb_answered'] = len(data_pilot['meat'][data_pilot['meat']['nb_words_meat_{}_open'.format(question)] > 0])
-    dict_text_meat[question]['length_answer_mean'] = data_pilot['meat']['nb_words_meat_{}_open'.format(question)].mean()
+    dict_text['meat'][question]['nb_asked'] = data_pilot['meat']['asked_{}'.format(question)].sum()
+    dict_text['meat'][question]['nb_answered'] = len(data_pilot['meat'][data_pilot['meat']['nb_words_meat_{}_open'.format(question)] > 0])
+    dict_text['meat'][question]['length_answer_mean'] = data_pilot['meat']['nb_words_meat_{}_open'.format(question)].mean()
     for i in [10,25,50,75,90]:
-        dict_text_meat[question]['length_answer_percentile_{}'.format(i)] = \
+        dict_text['meat'][question]['length_answer_percentile_{}'.format(i)] = \
             data_pilot['meat']['nb_words_meat_{}_open'.format(question)].quantile(i/100)
-    dict_text_meat[question]['length_answer_max'] = data_pilot['meat']['nb_words_meat_{}_open'.format(question)].max()
+    dict_text['meat'][question]['length_answer_max'] = data_pilot['meat']['nb_words_meat_{}_open'.format(question)].max()
 
 
 ### Airtravel
@@ -617,18 +644,18 @@ data_pilot['airtravel']['asked_open_mindedness_argument'] = (
     )
 data_pilot['airtravel']['asked_carbon_footprint_argument'] = data_pilot['airtravel']['asked_why_favorable']
 
-dict_text_airtravel = {}
+dict_text['airtravel'] = {}
 for question in ['why_against', 'why_neutral', 'why_favorable', 'open_mindedness_argument', 'carbon_footprint_argument']:
     data_pilot['airtravel']['nb_words_airtravel_{}_open'.format(question)] = data_pilot['airtravel']['airtravel_{}_open'.format(question)].str.len()
-    dict_text_airtravel[question] = {}
+    dict_text['airtravel'][question] = {}
 
-    dict_text_airtravel[question]['nb_asked'] = data_pilot['airtravel']['asked_{}'.format(question)].sum()
-    dict_text_airtravel[question]['nb_answered'] = len(data_pilot['airtravel'][data_pilot['airtravel']['nb_words_airtravel_{}_open'.format(question)] > 0])
-    dict_text_airtravel[question]['length_answer_mean'] = data_pilot['airtravel']['nb_words_airtravel_{}_open'.format(question)].mean()
+    dict_text['airtravel'][question]['nb_asked'] = data_pilot['airtravel']['asked_{}'.format(question)].sum()
+    dict_text['airtravel'][question]['nb_answered'] = len(data_pilot['airtravel'][data_pilot['airtravel']['nb_words_airtravel_{}_open'.format(question)] > 0])
+    dict_text['airtravel'][question]['length_answer_mean'] = data_pilot['airtravel']['nb_words_airtravel_{}_open'.format(question)].mean()
     for i in [10,25,50,75,90]:
-        dict_text_airtravel[question]['length_answer_percentile_{}'.format(i)] = \
+        dict_text['airtravel'][question]['length_answer_percentile_{}'.format(i)] = \
             data_pilot['airtravel']['nb_words_airtravel_{}_open'.format(question)].quantile(i/100)
-    dict_text_airtravel[question]['length_answer_max'] = data_pilot['airtravel']['nb_words_airtravel_{}_open'.format(question)].max()
+    dict_text['airtravel'][question]['length_answer_max'] = data_pilot['airtravel']['nb_words_airtravel_{}_open'.format(question)].max()
 
 
 ### Vehicle
@@ -650,18 +677,18 @@ data_pilot['vehicle']['asked_electric_pollutes_more_argument'] = (
     )
 data_pilot['vehicle']['asked_thermal_pollutes_more_argument'] = 1 - data_pilot['vehicle']['asked_electric_pollutes_more_argument']
 
-dict_text_vehicle = {}
+dict_text['vehicle'] = {}
 for question in ['why_against', 'why_neutral', 'why_favorable', 'electric_pollutes_more_argument', 'thermal_pollutes_more_argument']:
     data_pilot['vehicle']['nb_words_vehicle_{}_open'.format(question)] = data_pilot['vehicle']['vehicle_{}_open'.format(question)].str.len()
-    dict_text_vehicle[question] = {}
+    dict_text['vehicle'][question] = {}
 
-    dict_text_vehicle[question]['nb_asked'] = data_pilot['vehicle']['asked_{}'.format(question)].sum()
-    dict_text_vehicle[question]['nb_answered'] = len(data_pilot['vehicle'][data_pilot['vehicle']['nb_words_vehicle_{}_open'.format(question)] > 0])
-    dict_text_vehicle[question]['length_answer_mean'] = data_pilot['vehicle']['nb_words_vehicle_{}_open'.format(question)].mean()
+    dict_text['vehicle'][question]['nb_asked'] = data_pilot['vehicle']['asked_{}'.format(question)].sum()
+    dict_text['vehicle'][question]['nb_answered'] = len(data_pilot['vehicle'][data_pilot['vehicle']['nb_words_vehicle_{}_open'.format(question)] > 0])
+    dict_text['vehicle'][question]['length_answer_mean'] = data_pilot['vehicle']['nb_words_vehicle_{}_open'.format(question)].mean()
     for i in [10,25,50,75,90]:
-        dict_text_vehicle[question]['length_answer_percentile_{}'.format(i)] = \
+        dict_text['vehicle'][question]['length_answer_percentile_{}'.format(i)] = \
             data_pilot['vehicle']['nb_words_vehicle_{}_open'.format(question)].quantile(i/100)
-    dict_text_vehicle[question]['length_answer_max'] = data_pilot['vehicle']['nb_words_vehicle_{}_open'.format(question)].max()
+    dict_text['vehicle'][question]['length_answer_max'] = data_pilot['vehicle']['nb_words_vehicle_{}_open'.format(question)].max()
 
 
 ### Vaccine
@@ -680,18 +707,18 @@ data_pilot['vaccine']['asked_poor_country_argument'] = (
     )
 data_pilot['vaccine']['asked_protecting_others_argument'] = 1 - data_pilot['vaccine']['asked_poor_country_argument']
 
-dict_text_vaccine = {}
+dict_text['vaccine'] = {}
 for question in ['why_against', 'why_neutral', 'why_favorable', 'poor_country_argument', 'protecting_others_argument']:
     data_pilot['vaccine']['nb_words_vaccine_{}_open'.format(question)] = data_pilot['vaccine']['vaccine_{}_open'.format(question)].str.len()
-    dict_text_vaccine[question] = {}
+    dict_text['vaccine'][question] = {}
 
-    dict_text_vaccine[question]['nb_asked'] = data_pilot['vaccine']['asked_{}'.format(question)].sum()
-    dict_text_vaccine[question]['nb_answered'] = len(data_pilot['vaccine'][data_pilot['vaccine']['nb_words_vaccine_{}_open'.format(question)] > 0])
-    dict_text_vaccine[question]['length_answer_mean'] = data_pilot['vaccine']['nb_words_vaccine_{}_open'.format(question)].mean()
+    dict_text['vaccine'][question]['nb_asked'] = data_pilot['vaccine']['asked_{}'.format(question)].sum()
+    dict_text['vaccine'][question]['nb_answered'] = len(data_pilot['vaccine'][data_pilot['vaccine']['nb_words_vaccine_{}_open'.format(question)] > 0])
+    dict_text['vaccine'][question]['length_answer_mean'] = data_pilot['vaccine']['nb_words_vaccine_{}_open'.format(question)].mean()
     for i in [10,25,50,75,90]:
-        dict_text_vaccine[question]['length_answer_percentile_{}'.format(i)] = \
+        dict_text['vaccine'][question]['length_answer_percentile_{}'.format(i)] = \
             data_pilot['vaccine']['nb_words_vaccine_{}_open'.format(question)].quantile(i/100)
-    dict_text_vaccine[question]['length_answer_max'] = data_pilot['vaccine']['nb_words_vaccine_{}_open'.format(question)].max()
+    dict_text['vaccine'][question]['length_answer_max'] = data_pilot['vaccine']['nb_words_vaccine_{}_open'.format(question)].max()
 
 
 ### End of survey box
@@ -710,3 +737,27 @@ dict_text_end_survey['length_answer_max'] = data_pilot['full']['nb_words_end_of_
 # TODO: Do some stats over tags
 # TODO: Display most common words
 # TODO: treat end of survey end box
+
+"""
+Chantier ->
+
+dict_tags['meat']['why_against'] = {
+    'Health': [8,17,34,50,62,88,95,128,196,207,211,305,344,357,380,398,449,537,550,606,703,
+               719,821,838,992,2833,3236,3237],
+    'Cancer': [128, 380, 992],
+    'Cardiovascular_diseases': [606],
+    'Unnecessary_health': [34,95,207,313,380,397,719],
+    'Varied_diet': [17,80,334],
+    'Animal_welfare': [62,246,294,344,357,537,1273,2833],
+    'Environment': [211,246,357,493,512,537,902,929,3236],
+    'Quality': [170],
+    'Opposite_argument': [],
+    'Dont_know': [269],
+    'Unclear_undetermined': [57,100,228,453],
+    }
+
+tag = 'Unclear_undetermined'
+data_pilot['meat']['tags_answer_why_against'].str.count(tag).sum()
+
+"""
+
