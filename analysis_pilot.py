@@ -555,11 +555,19 @@ for theme in ['socio_demographics', 'ideology', 'cc_science']:
     dict_latex_tables[theme] = {}
     for question in dict_survey_statistics[theme]:
         title = dict_variables['Question_survey'][question]
+        
+        if sum(dict_survey_statistics[theme][question].values()) < 1+1e-03:
+            float_format="{:.0%}".format
+        elif sum(dict_survey_statistics[theme][question].values()) > 1+1e-03 and sum(dict_survey_statistics[theme][question].values()) < 100:
+            float_format="{:.1f}".format
+        else:
+            float_format="{:.0f}".format
+        
         dict_latex_tables[theme][question] = \
         pd.DataFrame.from_dict(dict_survey_statistics[theme][question], orient='index',
                            columns=['Percentage']).to_latex(
             caption='\"{}\"'.format(title),
-            float_format="{:.0%}".format,
+            float_format=float_format,
             )
 
 dict_latex_tables['full_tables'] = {}
