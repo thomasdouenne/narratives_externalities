@@ -11,6 +11,7 @@ from __future__ import division
 
 
 import pandas as pd
+import re
 
 
 ##### Read data from Qualtrics
@@ -307,6 +308,7 @@ for item in ['pros', 'cons']:
 
 del item, nb_topic, topic, var
 
+
 dict_topics = {}
 ##### Meat
 items_respondents_meat = [u'Jamais', u'Très occasionnellement', u'1 à 2 repas par semaine',
@@ -577,13 +579,13 @@ for theme in ['socio_demographics', 'ideology', 'cc_science']:
     latex_file = latex_file.replace("\end{document}",
         '\\clearpage' + '\n' + '{}'.format(section_title) + '\n' + dict_latex_tables['full_tables'][theme] + '\n' + "\end{document}" )
 
-latex_file = latex_file.replace('\end{document}',
-    '\n' + '\\section{Attitudes and views on four topics}' + '\n' + '\end{document}')
-
 del theme, question, section_title, title
 
 
 ### Respondents attitude and views on topics
+latex_file = latex_file.replace('\end{document}',
+    '\n' + '\\section{Attitudes and views on four topics}' + '\n' + '\end{document}')
+
 for topic in ['meat', 'airtravel', 'vehicle', 'vaccine']:
     dict_latex_tables[topic] = {}
 dict_latex_tables['meat']['joint_own_desirable'] = dict_topics['meat']['joint_own_desirable'].to_latex(
@@ -652,9 +654,54 @@ for topic in ['meat', 'airtravel', 'vehicle', 'vaccine']:
         
     latex_file = latex_file.replace("\end{document}",
         '\\clearpage' + '\n' + '{}'.format(section_title) + '\n' + dict_latex_tables['full_tables'][topic] + '\n' + "\end{document}" )
+    
+del topic, questions, question, section_title, title
+
+
+##### Argument matrices
+latex_file = latex_file.replace('\end{document}',
+    '\n' + '\\section{Answers to arguments matrices}' + '\n' + '\end{document}')
+
+for element in ['respondents', 'french']:
+    if element == 'respondents':
+        section_title = '\subsection{Respondents own views}'
+        column_format='p{5.0cm}|p{2.1cm}p{2.1cm}p{2.1cm}p{2.1cm}p{2.1cm}'
+        title = 'Parmi les arguments suivants, lesquels vous semblent pertinents ?'
+    elif element == 'french':
+        section_title = '\subsection{Beliefs about French people view}'
+        column_format='p{5.0cm}|p{1.8cm}p{1.8cm}p{1.8cm}p{1.8cm}p{1.8cm}p{1.8cm}'
+        title = 'D\'après vous, quelle part des Français jugent pertinent chacun des arguments suivants ?'
+    dict_latex_tables['matrices_' + element] = {}
+    dict_latex_tables['full_tables']['matrices_' + element] = ''
+    for topic in ['meat', 'airtravel', 'vehicle', 'vaccine']:
+        
+        final_indexes = []
+        current_indexes = dict_matrices_arguments[element][topic].index.tolist()
+        new_indexes = [dict_variables['Question_survey'][item] for item in current_indexes]
+
+        drop_before = " ? - "
+
+        for i in new_indexes:
+            final_i = re.sub(r'^.*?{}'.format(drop_before), '', i)
+            final_indexes.append(final_i)
+           
+        dict_matrices_arguments[element][topic].index = final_indexes
+        
+        dict_latex_tables['matrices_' + element][topic] = dict_matrices_arguments[element][topic].to_latex(
+            caption='\"{}\"'.format(title),
+            column_format=column_format,
+            float_format="{:.0%}".format,
+            )
+
+        dict_latex_tables['full_tables']['matrices_' + element] = (
+            dict_latex_tables['full_tables']['matrices_' + element] + '\n' + dict_latex_tables['matrices_' + element][topic]
+            )
+        
+    latex_file = latex_file.replace("\end{document}",
+        '\\clearpage' + '\n' + '{}'.format(section_title) + '\n' + dict_latex_tables['full_tables']['matrices_' + element] + '\n' + "\end{document}" )
         
 latex_file = latex_file.replace("begin{table}", "begin{table}[h!]")
 
-del topic, questions, question, section_title, title
+del topic, element, title, section_title, i, drop_before, final_indexes, new_indexes, current_indexes, final_i
 
 # TODO: check if there is a way to create sections in the script
